@@ -64,6 +64,7 @@
             <span>share with principle</span>
           </Radio>
         </RadioGroup>
+      </FormItem>
 
 <!--        <div v-for="(item,index) in modelUseDetail" :key="index">-->
 <!--          <div style="display: flex;flex-direction: row">-->
