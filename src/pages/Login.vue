@@ -1,13 +1,13 @@
 <template>
   <div class="login">
-    <div  v-if="!regVisible">
+    <div v-if="!regVisible">
       <div class="modal-div">
-        <img class="modal-ing1" src="@/assets/images/logo-tittle.png"/>
-        <img class="modal-img2" src="@/assets/images/EMCHub.png"/>
+        <img class="modal-ing1" src="@/assets/images/logo-tittle.png" />
+        <img class="modal-img2" src="@/assets/images/EMCHub.png" />
       </div>
       <div style="width: 600px;margin: 0 auto">
-        <Form style="margin: 40px auto"  ref="ruleValidate" :model="userLoginInfo"
-               label-position="top" :rules="ruleValidate">
+        <Form style="margin: 40px auto" ref="ruleValidate" :model="userLoginInfo" label-position="top"
+          :rules="ruleValidate">
           <FormItem label="UserLogInId" prop="UserLogInId">
             <Input v-model="userLoginInfo.custId"></Input>
           </FormItem>
@@ -18,33 +18,30 @@
       </div>
       <div class="modal-button-bottom">
         <Button @click="getLogin">
-          <img src="@/assets/images/logo-tittle.png"/>
+          <img src="@/assets/images/logo-tittle.png" />
           <span>LOGIN</span>
         </Button>
       </div>
       <div class="modal-button-bottom">
         <Button @click="doReg">
-          <img src="@/assets/images/default.png"/>
+          <img src="@/assets/images/default.png" />
           <span>New Registor</span>
         </Button>
       </div>
       <div class="modal-button-bottom">
-        <Button @click="getLogin">
-          <img src="@/assets/images/logo-tittle.png"/>
+        <Button @click="identityByIcWallet">
+          <img src="@/assets/images/logo-tittle.png" />
           <span>IC-WAllET</span>
         </Button>
       </div>
     </div>
-<!--    注册-->
+    <!--    注册-->
     <div v-if="regVisible">
       <div class="modal-div">
         <img class="modal-ing1" src="@/assets/images/logo-tittle.png" />
       </div>
       <div>
-        <Form class="register"
-              :model="userLoginInfo"
-              label-position="left"
-              :rules="ruleValidate">
+        <Form class="register" :model="userLoginInfo" label-position="left" :rules="ruleValidate">
           <FormItem label="loginId" prop="LogInId">
             <Input v-model="regInfoBussData.loginId"></Input>
           </FormItem>
@@ -71,7 +68,8 @@
 
 <script>
 
-import {authTokenSet, LoginByPassWD, userRegOrigin} from "@/api/login";
+import { authTokenSet, LoginByPassWD, userRegOrigin } from "@/api/login";
+import { instance as emcAuthClient } from '@/plugins/auth';
 import storage from "@/plugins/storage";
 
 export default {
@@ -80,12 +78,20 @@ export default {
     return {
       regVisible: false,
       hasLogin: false,
+      userInfo: {
+        userId: '',
+        principleId:''
+      },
       userLoginInfo: {
         custId: "1111",
         bussData: {
           identityType: "PASSWD",
           authToken: "0x9928ba"
         }
+      },
+      regInfo: {
+        actionCode: 'register',
+        bussData: {}
       },
       regInfoBussData: {
         loginId: '',
@@ -103,10 +109,10 @@ export default {
       },
       ruleValidate: {
         UserLogInId: [
-          {required: true, message: 'Please select the UserLogInId', trigger: 'blur'}
+          { required: true, message: 'Please select the UserLogInId', trigger: 'blur' }
         ],
         AuthToken: [
-          {required: true, message: 'Please select the AuthToken', trigger: 'blur'}
+          { required: true, message: 'Please select the AuthToken', trigger: 'blur' }
         ]
       },
     };
@@ -154,6 +160,20 @@ export default {
           alert("Register fail,please retry");
         }
       })
+    },
+    identityByIcWallet() {
+      emcAuthClient.login({
+        onSuccess: (message) => {
+          //{"type": "authorize-success","data": "tdvch-tx3ik-r2bzp-pncic-ahjes-57rvk-oa6qu-blzh2-brbs5-x67zv-jae"}
+          this.userInfo.principleId=message.data;
+          storage.setItem('principleId', this.userInfo.principleId);
+          console.info('success', message);
+        },
+        onError(message) {
+          alert('IC wallet identify fail!');
+          console.info(message);
+        },
+      })
     }
   }
 };
@@ -182,6 +202,7 @@ export default {
     height: 32px;
   }
 }
+
 .modal-button-bottom {
   width: 1200px;
   margin: 0 auto;
@@ -213,10 +234,11 @@ export default {
       font-weight: 500;
       position: absolute;
       top: calc(50% - 18px);
-      left:calc(50% - 15px);
+      left: calc(50% - 15px);
     }
   }
 }
+
 /deep/ .ivu-input {
   //margin-top: 30px;
   border-radius: 6px;
@@ -224,7 +246,8 @@ export default {
   background: rgba(0, 0, 0, 0.10);
   height: 40px;
 }
-.register{
+
+.register {
   display: flex;
   flex-direction: column;
   justify-content: center;
