@@ -40,20 +40,21 @@
             alt=""
           />
         </li>
+        
         <li>
-          <Button slot="append" class="check" @click="goSubject">全部</Button>
+          <Button slot="append" v-bind:class="{check:checked==='全部'}" @click="changeChecked('全部')">全部</Button>
         </li>
         <li>
-          <Button slot="append">Checkpoint</Button>
+          <Button slot="append" v-bind:class="{check:checked==='Checkpoint'}" @click="changeChecked('Checkpoint')">Checkpoint</Button>
         </li>
         <li>
-          <Button slot="append">Lora</Button>
+          <Button slot="append" v-bind:class="{check:checked==='Lora'}" @click="changeChecked('Lora')">Lora</Button>
         </li>
         <li>
-          <Button slot="append">ControInet</Button>
+          <Button slot="append" v-bind:class="{check:checked==='ControInet'}" @click="changeChecked('ControInet')">ControInet</Button>
         </li>
         <li>
-          <Button slot="append">其他</Button>
+          <Button slot="append" v-bind:class="{check:checked==='其他'}" @click="changeChecked('其他')">其他</Button>
         </li>
       </ul>
 
@@ -65,10 +66,11 @@
           alt=""
           @click="goUpload"
         />
-        <div class="item" :key="i.id" v-for="i in data">
-          <img :src="i.img"/>
+        <div class="item"  v-for="model in category1ModelGrid"
+            :key="model.modelId">
+          <img :src="model.src"/>
           <div class="masonry-shadow">
-            <div class="masonry-name">Mechanical fish</div>
+            <div class="masonry-name">{{model.desc}}</div>
             <div class="masonry-flex">
               <div class="masonry-img">
                 <img
@@ -95,62 +97,39 @@
   </div>
 </template>
 <script>
+import { getModelGridByCategoty1 } from "../../api/modelinfo";
 import data from "./data.json";
-import {queryModelInfoForMainView} from "@/api";
+import {getModelInfoForMainFrame} from "@/api/modelinfo.js";
 
 export default {
   name: "modelForm",
   components: {},
   data() {
     return {
+      checked:"全部",
       data,
-      messages: [
-        {
-          id: "1",
-          title: "yiyiyi",
-          desc: "阿萨德",
-          time: "最近更新:20230704",
-          num: 1342,
-          src: "https://www.bugela.com/cjpic/frombd/0/253/2650769822/1477358335.jpg",
-        },
-        {
-          id: "2",
-          title: "ererer",
-          desc: "阿萨德",
-          time: "最近更新:20230704",
-          num: 1342,
-          src: "https://www.bugela.com/cjpic/frombd/0/253/2650769822/1477358335.jpg",
-        },
-        {
-          id: "3",
-          title: "sansansan",
-          desc: "阿萨德",
-          time: "最近更新:20230704",
-          num: 1342,
-          src: "https://www.bugela.com/cjpic/frombd/0/253/2650769822/1477358335.jpg",
-        },
-        {
-          id: "4",
-          title: "sisisi",
-          desc: "阿萨德",
-          time: "最近更新:20230704",
-          num: 1342,
-          src: "https://www.bugela.com/cjpic/frombd/0/253/2650769822/1477358335.jpg",
-        },
-        {
-          id: "5",
-          title: "sisisi",
-          desc: "阿萨德",
-          time: "最近更新:20230704",
-          num: 1342,
-          src: "https://www.bugela.com/cjpic/frombd/0/253/2650769822/1477358335.jpg",
-        },
-      ],
+      messages: [],
+      category1ModelGrid: []
     };
   },
   created() {
+    this.initThematicModels();
+    this.initCategory1Models();
   },
   methods: {
+  initThematicModels(){
+    this.messages = getModelInfoForMainFrame();
+  },
+  initCategory1Models() {
+    this.category1ModelGrid = getModelGridByCategoty1();
+  },
+  changeChecked(value){
+    this.checked = value;
+
+    // 当选择全部时不传category1参数，后端降级查全部
+    const param = value === '全部' ? null : value;
+    this.category1ModelGrid = getModelGridByCategoty1(param);
+  },
   shopEntry(id) {
     this.$router.push("modelDetail");
   },
@@ -232,6 +211,11 @@ export default {
   padding: 1px;
 }
 
+.check{
+  background: #333;
+  color: #fff;
+}
+
 .model-waterfall {
   font-family: Roboto;
   margin-top: 35px;
@@ -254,8 +238,8 @@ export default {
     .ivu-btn,
     .ivu-btn:active,
     .ivu-btn:focus {
-      background: #333;
-      color: #fff;
+      //background: #333;
+      //color: #fff;
     }
   }
 

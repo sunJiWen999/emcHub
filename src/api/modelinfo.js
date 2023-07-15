@@ -18,7 +18,7 @@ export function getModelInfoForMainFrame() {
             modelInfoItem.id = modelInfo.modelId;
             modelInfoItem.title = modelInfo.modelName;
             modelInfoItem.desc = modelInfo.modelSubName;
-            modelInfoItem.src = "https://www.bugela.com/cjpic/frombd/0/253/2650769822/1477358335.jpg";
+            modelInfoItem.src = modelInfo.modelCover[0];
             modelInfoItem.num = 322;
             modeInfoGrid.push(modelInfoItem);
             console.log(modeInfoGrid[i], "99999977777777777777777777");
@@ -42,7 +42,7 @@ export function getModelGridByCategoty1(category){
             modelInfoItem.id = modelInfo.modelId;
             modelInfoItem.title = modelInfo.modelName;
             modelInfoItem.desc = modelInfo.modelSubName;
-            modelInfoItem.img = "/myImg/17.jpg";
+            modelInfoItem.img = modelInfo.modelCover[0];
             modeInfoGrid.push(modelInfoItem);
         }
 
@@ -59,7 +59,7 @@ function queryMainGrid() {
             "custId": "1685969357974",
             "bussData": {
                 "pageIndex": 0,
-                "pageSize": 10
+                "pageSize": 5
             }
         }
     });
@@ -80,18 +80,21 @@ function queryByCategory1(category){
     });
 }
 
-export function addModelBaseInfo(formModel) {
+/**
+ * addmodel-baseInfo
+ * @param {*} param 
+ * @returns 
+ */
+export function addModelBaseInfo(param) {
+
+    if(param.custId== null ){
+        param.custId='PUBLIC';
+
+    }
     return request({
-        url: '/queryModelInfoByCategory1.do',
+        url: '/addNewModel.do',
         method: 'POST',
-        data: {
-            "custId": "1685969357974",
-            "bussData": {
-                "pageIndex": 0,
-                "pageSize": 10,
-                "category1":category
-            }
-        }
+        data: param
     });
 
 }
