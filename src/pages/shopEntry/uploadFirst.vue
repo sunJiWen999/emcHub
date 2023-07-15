@@ -55,6 +55,7 @@
         <Input v-model="formValidate.ModelDescribe" type="textarea" :autosize="{minRows: 5,maxRows: 10}"
                ></Input>
       </FormItem>
+<<<<<<< HEAD
 <!--      <FormItem label="How to use" prop="ModelUse">-->
 <!--        <RadioGroup v-model="formValidate.ModelUse" vertical>-->
 <!--          <Radio label="public to eveyone">-->
@@ -64,6 +65,18 @@
 <!--            <span>share with principle</span>-->
 <!--          </Radio>-->
 <!--        </RadioGroup>-->
+=======
+      <FormItem label="How to use" prop="ModelUse">
+        <RadioGroup v-model="formValidate.ModelUse" vertical>
+          <Radio label="public to eveyone">
+            <span>public to eveyone</span>
+          </Radio>
+          <Radio label="share with principle">
+            <span>share with principle</span>
+          </Radio>
+        </RadioGroup>
+      </FormItem>
+>>>>>>> 66131ad131f09fcff3b8dfc8b049f30b39065a5f
 
 <!--        <div v-for="(item,index) in modelUseDetail" :key="index">-->
 <!--          <div style="display: flex;flex-direction: row">-->
