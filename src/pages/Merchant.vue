@@ -11,7 +11,7 @@
           />
         </li>
          <li>
-          <Button slot="append" class="check" @click="goSubject">全部</Button>
+          <Button slot="append"  @click="goSubject">全部</Button>
         </li>
         <li>
           <Button slot="append">Checkpoint</Button>
