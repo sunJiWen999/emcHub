@@ -8,10 +8,10 @@
       <FormItem label="ModelName" prop="ModelName">
         <Input v-model="formValidate.modelName"></Input>
       </FormItem>
-      <FormItem label="ModelSubName" prop="ModelSubName">
-        <Input v-model="formValidate.modelSubName">
-        </Input>
-      </FormItem>
+<!--      <FormItem label="ModelSubName" prop="ModelSubName">-->
+<!--        <Input v-model="formValidate.modelSubName">-->
+<!--        </Input>-->
+<!--      </FormItem>-->
       <FormItem   label="Tag" prop="cateGory2">
         <Button closable class="model-uploadFirst-tag"
              @click="()=>this.formValidate.cateGory2+='PERSON'+ ','"
@@ -32,7 +32,7 @@
           <Option v-for="item in categoryList"
                   :value="item.value"
                   :key="item.value">{{ item.label }}</Option>
-        </Select>--> 
+        </Select>-->
         <FormItem label="ModelSubName" prop="ModelSubName">
         <Input v-model="formValidate.cateGory2">
         </Input>
@@ -55,15 +55,15 @@
         <Input v-model="formValidate.ModelDescribe" type="textarea" :autosize="{minRows: 5,maxRows: 10}"
                ></Input>
       </FormItem>
-      <FormItem label="How to use" prop="ModelUse">
-        <RadioGroup v-model="formValidate.ModelUse" vertical>
-          <Radio label="public to eveyone">
-            <span>public to eveyone</span>
-          </Radio>
-          <Radio label="share with principle">
-            <span>share with principle</span>
-          </Radio>
-        </RadioGroup>
+<!--      <FormItem label="How to use" prop="ModelUse">-->
+<!--        <RadioGroup v-model="formValidate.ModelUse" vertical>-->
+<!--          <Radio label="public to eveyone">-->
+<!--            <span>public to eveyone</span>-->
+<!--          </Radio>-->
+<!--          <Radio label="share with principle">-->
+<!--            <span>share with principle</span>-->
+<!--          </Radio>-->
+<!--        </RadioGroup>-->
 
 <!--        <div v-for="(item,index) in modelUseDetail" :key="index">-->
 <!--          <div style="display: flex;flex-direction: row">-->
@@ -114,7 +114,7 @@ export default {
         modelDescribe:''
       },
       vertical: 'apple',
-      formValidate: {
+      ruleValidate: {
         modelName:[
           {required: true, message: 'Please input the ModelName', trigger: 'blur'}
         ],
@@ -157,7 +157,6 @@ export default {
   },
   methods: {
     handleSubmit(name){
-      // this.$emit("uploadFirstModelId", "12345");
       // let modelInfo = {
       //   modelName: "myfirst model",
       //   modelSubName: "myfirst model sub name",
@@ -167,7 +166,6 @@ export default {
         if (valid) {
           let params = {
             bussData: {
-              // modelInfo: JSON.stringify(modelInfo)
               modelInfo: JSON.stringify(this.formValidate)
             },
           };
