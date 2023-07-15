@@ -39,15 +39,15 @@
     </Upload>
     <span class="model-upload-three-span">最多添加5个文件，支持ckpt、pt、safetensors、bin、zip文件</span>
     <span class="model-upload-three-oldUpload">已上传</span>
-    <div class="model-upload-three-bottom">
+    <div class="model-upload-three-bottom" v-for="(item) in fileIdList">
       <div style="display: flex;flex-direction: row;justify-content: space-between">
-        <span class="span-url">文件名称.zip</span>
-        <Button class="but-del">删除</Button>
+        <span class="span-url">{{item.name}}</span>
+        <Button class="but-del" @click="del(item.name)">删除</Button>
       </div>
-      <div style="display: flex;flex-direction: row;justify-content: space-between;margin-top: 10px">
-        <span class="span-url">文件名称.zip</span>
-        <Button class="but-del">删除</Button>
-      </div>
+<!--      <div style="display: flex;flex-direction: row;justify-content: space-between;margin-top: 10px">-->
+<!--        <span class="span-url">文件名称.zip</span>-->
+<!--        <Button class="but-del">删除</Button>-->
+<!--      </div>-->
     </div>
     <div style="display: flex;flex-direction: row;justify-content: center">
       <Button class="upload-content-xia"
@@ -75,18 +75,33 @@ export default {
     return {
       uploadAction: '',
       uid:null,
-      fileIdList:[]
+      fileIdList:[
+      ]
     }
   },
   props: {
     model_id:{type:String,require:true},
     currentSub: {type: Function, require: true},
     currentAdd: {type: Function, require: true},
+    treeParams:{type:Object,require:true}
+  },
+  created() {
+    console.log(this.treeParams,4444)
+    let modelDetail =JSON.parse(this.treeParams.bussData.modeldateil)
+    console.log(modelDetail,444)
+    // this.fileIdList=modelDetail.downloadLink
   },
   methods: {
+     del(name) {
+       this.fileIdList.splice(
+         this.fileIdList.indexOf(this.fileIdList.find(function(item){ return item.name === name })), 1);
+    },
     handleSuccess (res, file) {
-      console.log(file,555555555)
-      this.fileIdList.push(file.response.bussData.file_link)
+      // this.fileIdName.push(file.name)
+      this.fileIdList.push({
+        file_link:file.response.bussData.file_link,
+        name:file.name
+      })
       this.$Message.success(`upload${file.response.resultCode}`)
     },
     handleFormatError (file) {
@@ -108,34 +123,36 @@ export default {
       }
     },
     handleSubmit() {
-      // if(!this.fileId){
-      //   return this.$Message.warning('upload please')
-      // }
-      // this.currentAdd(1)
+      if(this.fileIdList.length==0){
+        return this.$Message.warning('upload please')
+      }
+      let fileId=[]
+      this.fileIdList.forEach(item=>{
+        fileId.push(item.file_link)
+      })
       let modelDateil={
-        // modelId:this.model_id
-        modelId: "b20db117-e130-413a-ae92-059e49839cb9",
-        version: "111",
+        modelId:this.model_id,
+        version: null,
         guideLink: null,
         paramsGuideLink: null,
         sampleCodeLink: null,
-        downloadLink:'f7060ed7-dfef-490f-bed7-54c3f71ff615',
-        // downloadLink:this.fileIdList,
+        downloadLink:this.fileId,
       }
       let params = {
         bussData:{
           modeldateil:JSON.stringify(modelDateil)
         },
-        userId: '111',
+        custId: '111',
       }
-      console.log(params,5555555)
+      console.log(params,44)
+      // this.$emit('uploadTreeModalParams',params)
       modelUpload(params).then(res => {
-        console.log(res, 44444444)
-          if (data['resultCode'] === 'SUCCESS') {
+        console.log(res,4444444)
+          if (res['resultCode'] === 'SUCCESS') {
+            this.$emit('uploadTreeModalParams',params)
             this.currentAdd(1)
           }
       })
-      this.currentAdd(1)
     },
     up(){
       this.currentSub(1)

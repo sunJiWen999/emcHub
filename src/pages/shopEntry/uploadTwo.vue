@@ -8,18 +8,18 @@
       <FormItem label="版本编号" prop="version">
         <Input v-model="formValidate.version"></Input>
       </FormItem>
-      <FormItem label="基础类型" prop="city">
-        <Select v-model="formValidate.city">
-        </Select>
-      </FormItem>
-      <FormItem label="搜索触发词" prop="version">
-        <Tag closable class="model-uploadFirst-tag">触发词</Tag>
-        <Tag closable class="model-uploadFirst-tag">触发词</Tag>
-        <Tag closable class="model-uploadFirst-tag">触发词</Tag>
-        <Input v-model="formValidate.version"/>
-      </FormItem>
-      <FormItem label='版本说明' prop="desc">
-        <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 5,maxRows: 10}"
+<!--      <FormItem label="基础类型" prop="city">-->
+<!--        <Select v-model="formValidate.city">-->
+<!--        </Select>-->
+<!--      </FormItem>-->
+<!--      <FormItem label="搜索触发词" prop="version">-->
+<!--        <Tag closable class="model-uploadFirst-tag">触发词</Tag>-->
+<!--        <Tag closable class="model-uploadFirst-tag">触发词</Tag>-->
+<!--        <Tag closable class="model-uploadFirst-tag">触发词</Tag>-->
+<!--        <Input v-model="formValidate.version"/>-->
+<!--      </FormItem>-->
+      <FormItem label='版本说明' prop="modelDesc">
+        <Input v-model="formValidate.modelDesc" type="textarea" :autosize="{minRows: 10,maxRows: 10}"
         ></Input>
       </FormItem>
       <FormItem style="display: flex;flex-direction: row;justify-content: center">
@@ -50,41 +50,14 @@ export default {
       agreeShow: false, // 控制点击
       formValidate: {
         version: "",
-        mail: '',
-        city: '',
-        gender: '',
-        interest: [],
-        date: '',
-        time: '',
-        desc: ''
+        modelDesc:''
       },
       ruleValidate: {
         version: [
           {required: true, message: 'The version cannot be empty', trigger: 'blur'}
         ],
-        mail: [
-          {required: true, message: 'Mailbox cannot be empty', trigger: 'blur'},
-          {type: 'email', message: 'Incorrect email format', trigger: 'blur'}
-        ],
-        city: [
-          {required: true, message: 'Please select the city', trigger: 'change'}
-        ],
-        gender: [
-          {required: true, message: 'Please select gender', trigger: 'change'}
-        ],
-        interest: [
-          {required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change'},
-          {type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change'}
-        ],
-        date: [
-          {required: true, type: 'date', message: 'Please select the date', trigger: 'change'}
-        ],
-        time: [
-          {required: true, type: 'string', message: 'Please select time', trigger: 'change'}
-        ],
-        desc: [
-          {required: true, message: 'Please enter a personal introduction', trigger: 'blur'},
-          {type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur'}
+        modelDesc:[
+          {required: true, message: 'The modelDesc cannot be empty', trigger: 'blur'}
         ]
       }
     }
@@ -97,8 +70,9 @@ export default {
   },
   created() {
     if(this.twoParams){
-      console.log(this.twoParams)
-      alert(1111)
+      let modelDetail =JSON.parse(this.twoParams.bussData.modelDetail)
+      this.formValidate.version=modelDetail.version
+      this.formValidate.modelDesc=modelDetail.modelDesc
     }
   },
   methods: {
@@ -106,11 +80,11 @@ export default {
       let modelDetail = {
         // modelId: "77b35362-8914-420b-8648-51c221857d5d",
         modelId: this.model_id,
-        version: "0.01",
-        downloadLink: "https://github.com/yangsenessa/mrchai/tree/emchubV0.0.1",
-        guideLink: "https://github.com/yangsenessa/mrchai/tree/emchubV0.0.1",
-        paramsGuideLink: "https://github.com/yangsenessa/mrchai/tree/emchubV0.0.1",
-        sampleCodeLink: "https://github.com/yangsenessa/mrchai/tree/emchubV0.0.1",
+        ...this.formValidate,
+        downloadLink: "",
+        guideLink: "",
+        paramsGuideLink: "",
+        sampleCodeLink: "",
         invokeGuide: "NOTICE:LET ME KNOW before you put this model on commercial usage. My twitter account:@eagelaxis :) Contact me if needed.Discord Account:Eagelaxis#7818Version Choosing Advice:V2f,V3,Coda and V3.5 are recommended,especially CODA for first-time users.Hard to tell how many models used to merge.Check the example images to recognize this model's art styleFor more example images, just take a look at https://pixai.art",
         negativePromts: "1 corneo_power, bedroom, cute face, detailed body, detailed face, (sharp_teeth:0.8), +_+, pink panties, kids panties, home white t-shirt <lyco:GoodHands-beta2:1.0>",
         positivePromts: "blurry, ugly, bad anatomy, extra limbs, undersaturated, low resolution, disfigured, deformations, out of frame, amputee, bad proportions, extra limb, missing limbs, distortion, floating limbs, out of frame, poorly drawn face, poorly drawn hands, text, malformed, missing fingers, cropped, wrong colour of clothes, wrong fingers",
@@ -133,7 +107,7 @@ export default {
         }
       })
 
-      this.currentAdd(1)
+      // this.currentAdd(1)
     },
     up() {
       this.currentSub(1)

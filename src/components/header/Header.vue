@@ -20,10 +20,10 @@
             <img class="detail-line" src="@/assets/images/Line1.png" alt="" />
           </li>
 
-          <li>
-            <Button @click="loginVisible = true" class="detail-button">Log in</Button>
+          <li v-if="!custId">
+            <Button @click="login" class="detail-button">Log in</Button>
           </li>
-          <li style="position: relative;cursor: pointer;" @click="Information">
+          <li v-if="custId" style="position: relative;cursor: pointer;" @click="Information">
             <img src="@/assets/images/Ellipse6.png" class="nav-item nav-d" />
             <span class="detail-name">d</span>
           </li>
@@ -58,15 +58,17 @@
         <div class="box-logout">退出登陆</div>
       </div>
     </Card>
-
-    <Modal :styles="{ top: '20vh' }" width="755px" class-name="vertical-center-modal" v-model="loginVisible" draggable
+<!--登录-->
+    <Modal v-if="!custId" :styles="{ top: '20vh' }"
+           width="755px" class-name="vertical-center-modal" v-model="loginVisible" draggable
       :mask="true" :footer-hide="true">
       <div class="modal-div">
         <img class="modal-ing1" src="@/assets/images/logo-tittle.png" />
         <img class="modal-img2" src="@/assets/images/EMCHub.png" />
       </div>
-      <div class="modal-div">
-        <Form ref="ruleValidate" :model="userLoginInfo" label-position="top" :rules="ruleValidate">
+        <Form style="margin-top: 30px;width: 100%;display: flex;flex-direction: column;
+        align-items: center" ref="ruleValidate" :model="userLoginInfo"
+              label-position="left" :label-width="90" :rules="ruleValidate">
           <FormItem label="UserLogInId" prop="UserLogInId">
             <Input v-model="userLoginInfo.custId"></Input>
           </FormItem>
@@ -74,7 +76,6 @@
             <Input v-model="userLoginInfo.bussData.authToken"></Input>
           </FormItem>
         </Form>
-      </div>
       <div class="modal-button-bottom">
         <Button @click="getLogin">
           <img src="@/assets/images/logo-tittle.png" />
@@ -95,13 +96,15 @@
       </div>
     </Modal>
 
-    <Modal :styles="{ top: '20vh' }" :body-style="bodystyle" width="755px" class-name="vertical-center-modal"
+    <Modal :styles="{ top: '20vh' }"  width="755px" class-name="vertical-center-modal"
       v-model="regVisible" draggable :mask="true" :footer-hide="true">
       <div class="modal-div">
         <img class="modal-ing1" src="@/assets/images/logo-tittle.png" />
       </div>
-      <div class="modal-div">
-        <Form :model="userLoginInfo" label-position="top" :rules="ruleValidate">
+        <Form class="register"
+       :model="userLoginInfo"
+          label-position="left"
+              :rules="ruleValidate">
           <FormItem label="loginId" prop="LogInId">
             <Input v-model="regInfoBussData.loginId"></Input>
           </FormItem>
@@ -115,7 +118,6 @@
             <Input v-model="authInfoData.bussData.authToken"></Input>
           </FormItem>
         </Form>
-      </div>
 
       <div class="modal-button-bottom">
         <Button @click="commitReg">
@@ -137,23 +139,24 @@ import { LoginByPassWD, userRegOrigin, authTokenSet } from "@/api/login";
 export default {
   name: "M-Header",
   created() {
+    // storage.getItem('custId')
+    console.log(storage.getItem('custId'))
   },
 
   data() {
     return {
       loginVisible: false,
       regVisible: false,
-      userInfo: {}, // 用户信息
+      custId:storage.getItem('custId'), // 用户信息
       userLoginInfo: {
-        custId: "",
+        custId: "1111",
         bussData: {
-          identityType: "",
-          authToken: ""
+          identityType: "PASSWD",
+          authToken: "0x9928ba"
         }
       },
       regInfo: {
         actionCode: 'register',
-
         bussData: {
           applRegInfo: ''
         }
@@ -214,6 +217,9 @@ export default {
   computed: {
   },
   methods: {
+    login(){
+      this.$router.push('/login')
+    },
     goCreate() {
       this.$router.push('/Create')
     },
@@ -227,7 +233,9 @@ export default {
       LoginByPassWD(this.userLoginInfo).then(res => {
         if (res.loginStatus === 'true') {
           this.hasLogin = true;
-          alert("Login Success@");
+          this.loginVisible=false
+          storage.setItem('custId',this.userInfo.custId)
+          this.$router.push('/login')
         } else {
           alert("Login fail");
         }
@@ -599,6 +607,7 @@ export default {
   align-items: center;
   justify-content: center;
   margin-top: 92px;
+  //background: #04ad11;
 
   .modal-ing1 {
     width: 57px;
@@ -614,13 +623,15 @@ export default {
 }
 
 .modal-button-bottom {
-  text-align: center;
-  margin-bottom: 92px;
-  margin-top: 60px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   button {
-    width: 656px;
-    height: 30px;
+    width: 400px;
+    height: 50px;
     border-radius: 14px;
     position: relative;
     background: linear-gradient(90deg, #834FFC 0%, #E5AEFF 100%);
@@ -630,7 +641,7 @@ export default {
       height: 30px;
       position: absolute;
       top: calc(50% - 15px);
-      left: 189px;
+      left: calc(40% - 15px);
     }
 
     span {
@@ -641,8 +652,26 @@ export default {
       font-weight: 500;
       position: absolute;
       top: calc(50% - 18px);
-      left: 240px;
+      left:calc(50% - 15px);
     }
   }
+}
+/deep/ .ivu-form-item-error .ivu-input {
+  border: 1px solid #BF61F9;
+}
+
+/deep/ .ivu-input {
+  //margin-top: 30px;
+  border-radius: 6px;
+  width: 400px;
+  background: rgba(0, 0, 0, 0.10);
+  height: 40px;
+}
+.register{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  //background: #04ad11;
 }
 </style>

@@ -40,6 +40,8 @@
                 :currentSub="currentSub"
                 :currentAdd="currentAdd"
                 :model_id="model_id"
+                :treeParams="treeParams"
+                @uploadTreeModalParams="uploadTreeModalParams"
     />
     <uploadFour v-if="current === 3"
                 :currentSub="currentSub"
@@ -60,7 +62,8 @@ export default {
       current: 0,
       model_id: null,
       firstParams:null,
-      twoParams:null
+      twoParams:null,
+      treeParams:null
     };
   },
   components: {
@@ -76,6 +79,10 @@ export default {
     // 第二步保存的值
     uploadTwoModalParams(val){
       this.twoParams=val
+    },
+    uploadTreeModalParams(val){
+      console.log(val,'val')
+      this.treeParams=val
     },
     uploadFirstModelId(id) {
       console.log(id,'id')
