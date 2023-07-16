@@ -34,7 +34,7 @@
       :before-upload="handleBeforeUpload"
       multiple
       type="drag"
-      action="https://6006s04c14.zicp.fun:443/mrchaiemc/fileUpload.do">
+      :action="uploadAction">
       <img src="@/assets/images/emc/Vector.png"/>
     </Upload>
     <span class="model-upload-three-span">最多添加5个文件，支持ckpt、pt、safetensors、bin、zip文件</span>
@@ -68,12 +68,13 @@
 
 <script>
 import {modelUpload} from "@/api/upload";
+import storage from "@/plugins/storage";
 
 export default {
   name: "uploadTree.vue",
   data() {
     return {
-      uploadAction: '',
+      uploadAction: BASE.API_PROD.emchub+'/fileUpload.do',
       uid:null,
       fileIdList:[
       ]
@@ -142,7 +143,7 @@ export default {
         bussData:{
           modeldateil:JSON.stringify(modelDateil)
         },
-        custId: '111',
+        custId: storage.getItem('custId'),
       }
       console.log(params,44)
       // this.$emit('uploadTreeModalParams',params)

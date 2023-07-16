@@ -10,7 +10,7 @@ export function getModelInfoForMainFrame() {
         var modelListres = {};
 
         modelListres = JSON.parse(res.bussData.modelList);
-        console.log(modelListres, "99999999999999999999999999");
+       // console.log(modelListres, "99999999999999999999999999");
 
         for (var i = 0; i < modelListres.length; i++) {
             var modelInfoItem = {};
@@ -18,10 +18,11 @@ export function getModelInfoForMainFrame() {
             modelInfoItem.id = modelInfo.modelId;
             modelInfoItem.title = modelInfo.modelName;
             modelInfoItem.desc = modelInfo.modelSubName;
-            modelInfoItem.src = modelInfo.modelCover[0];
+            console.log(modelInfo.modelCover[0], "modelcover");
+            modelInfoItem.src =  modelInfo.modelCover[0]  ;
             modelInfoItem.num = 322;
             modeInfoGrid.push(modelInfoItem);
-            console.log(modeInfoGrid[i], "99999977777777777777777777");
+            //console.log(modeInfoGrid[i], "99999977777777777777777777");
         } 
     });
 
@@ -34,7 +35,7 @@ export function getModelGridByCategoty1(category){
     var modeInfoGrid = new Array();
     queryByCategory1(category).then(res => {
         var modelListres = {};
-
+        console.log(modelListres, "resOfCategory1");
         modelListres = JSON.parse(res.bussData.modelList);
         for (var i = 0; i < modelListres.length; i++) {
             var modelInfoItem = {};
@@ -42,11 +43,12 @@ export function getModelGridByCategoty1(category){
             modelInfoItem.id = modelInfo.modelId;
             modelInfoItem.title = modelInfo.modelName;
             modelInfoItem.desc = modelInfo.modelSubName;
-            modelInfoItem.img = modelInfo.modelCover[0];
+            modelInfoItem.src = modelInfo.modelCover[0]  ;
             modeInfoGrid.push(modelInfoItem);
         }
 
     });
+    console.log(modeInfoGrid, "modelInfoGripOfCategory1");
     return modeInfoGrid;
 
 }

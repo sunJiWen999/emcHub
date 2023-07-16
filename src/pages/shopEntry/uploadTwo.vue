@@ -42,6 +42,7 @@
 
 <script>
 import {modModelDetailInfo} from "@/api/upload";
+import storage from "@/plugins/storage";
 
 export default {
   name: "uploadTwo",
@@ -91,8 +92,8 @@ export default {
         commonParams: "Steps: 85, Size: 576x1024, Seed: 3172589486, Model: darkSushiMixMix_225D, Sampler: DPM++ SDE Karras, CFG scale: 8, Model hash: cca17b08da, Variation seed: 741382554, Variation seed strength: 0.15",
       }
       let params = {
-        "custId": "1111",
-        "bussData": {
+        custId: storage.getItem('custId'),
+        bussData: {
           modelDetail: JSON.stringify(modelDetail)
         }
       }

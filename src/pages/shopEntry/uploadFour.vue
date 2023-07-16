@@ -12,7 +12,7 @@
         :before-upload="handleBeforeUpload"
         multiple
         type="drag"
-        action="https://6006s04c14.zicp.fun:443/mrchaiemc/fileUpload.do">
+        :action="uploadAction">
         <img src="@/assets/images/emc/Vector.png"/>
         <!--        <span>上传模型缩略图，不限尺寸</span>-->
       </Upload>
@@ -69,11 +69,13 @@
 
 <script>
 import {addNewModel, modModelDetailInfo} from "@/api/upload";
+import storage from "@/plugins/storage";
 
 export default {
   name: "uploadFour.vue",
   data() {
     return {
+      uploadAction: BASE.API_PROD.emchub+'/fileUpload.do',
       fileIdList: [],
       tagList: ['标签一'],
       formValidate: {
@@ -141,23 +143,31 @@ export default {
       }
       // coverImgList:"http://36.155.7.134:9000/emcbucket/2023/07/14/%5B1689349213013%5Dphoto01.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20230714%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230714T154013Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=e71c37bf2559d6358aa344947a6a8d400a0924870a2836bbf68d00ad6ea41135"}
       let params = {
-        custId: "1111",
+        custId: storage.getItem('custId'),
         bussData: {
           modelInfo: JSON.stringify(modelInfo),
           modelCover: JSON.stringify(modelCover)
         }
       }
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          addNewModel(params).then(res => {
-            if (res.resultCode === 'SUCCESS') {
-               this.$Message.success('success')
-              // this.currentAdd(1)
-              // this.$emit('uploadTwoModalParams',params)
-            }
-          })
+      addNewModel(params).then(res => {
+        if (res.resultCode === 'SUCCESS') {
+          this.$Message.success('success')
+          // this.currentAdd(1)
+          this.$router.push('/')
+          // this.$emit('uploadTwoModalParams',params)
         }
       })
+      // this.$refs[name].validate((valid) => {
+      //   if (valid) {
+      //     addNewModel(params).then(res => {
+      //       if (res.resultCode === 'SUCCESS') {
+      //          this.$Message.success('success')
+      //         // this.currentAdd(1)
+      //         // this.$emit('uploadTwoModalParams',params)
+      //       }
+      //     })
+      //   }
+      // })
     }
   }
 }

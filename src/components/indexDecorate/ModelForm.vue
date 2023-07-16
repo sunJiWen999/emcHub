@@ -4,33 +4,41 @@
       <img class="model-thematic" src="@/assets/images/ThematicModels.png" alt="" />
       <div class="model-card">
         <Row :gutter="16">
-          <Col class="model-card-col" v-for="model in messages" :key="model.modelId">
-          <div class="model-card-item" @click="shopEntry(model.id)">
-            <img class="model-img" :src="model.src" />
-            <div class="model-card-shadow">
-              <div class="model-card-content">
-                <div>
-                  <!--                    <div>{{ model.modelName }}</div>-->
-                  <div>{{ model.desc }}</div>
-                  <div>{{ model.time }}</div>
-                </div>
-                <div>
-                  <img class="model-card-square" src="@/assets/images/emc/Vector1.png" />
-                  <div>1343</div>
+          <Col
+            class="model-card-col"
+            v-for="model in messages"
+            :key="model.modelId"
+          >
+            <div class="model-card-item" @click="shopEntry(model.modelId)">
+              <img class="model-img" :src="loadImage(model.src)"/>
+              <div class="model-card-shadow">
+                <div class="model-card-content">
+                  <div>
+<!--                    <div>{{ model.modelName }}</div>-->
+                    <div>{{model.title}}</div>
+                    <div>{{model.time}}</div>
+                  </div>
+                  <div>
+                    <img class="model-card-square" src="@/assets/images/emc/Vector1.png"/>
+                    <div>1343</div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           </Col>
         </Row>
       </div>
       <ul class="model-waterfall">
-        <li>
-          <img class="model-Recommended" src="@/assets/images/Recommended.png" alt="" />
+        <li v-if="custId">
+          <img
+            class="model-Recommended"
+            src="@/assets/images/Recommended.png"
+            alt=""
+          />
         </li>
 
         <li>
-          <Button slot="append" v-bind:class="{ check: checked === '全部' }" @click="changeChecked('全部')">全部</Button>
+          <Button slot="append" v-bind:class="{check:checked==='All'}" @click="changeChecked('All')">All</Button>
         </li>
         <li>
           <Button slot="append" v-bind:class="{ check: checked === 'Checkpoint' }"
@@ -40,20 +48,26 @@
           <Button slot="append" v-bind:class="{ check: checked === 'Lora' }" @click="changeChecked('Lora')">Lora</Button>
         </li>
         <li>
-          <Button slot="append" v-bind:class="{ check: checked === 'ControInet' }"
-            @click="changeChecked('ControInet')">ControInet</Button>
+          <Button slot="append" v-bind:class="{check:checked==='Controlnet'}" @click="changeChecked('Controlnet')">Controlnet</Button>
         </li>
         <li>
-          <Button slot="append" v-bind:class="{ check: checked === '其他' }" @click="changeChecked('其他')">其他</Button>
+          <Button slot="append" v-bind:class="{check:checked==='Other'}" @click="changeChecked('Other')">Other</Button>
         </li>
       </ul>
 
       <div class="masonry">
-        <img class="uploadItem" :key="10086" src="@/assets/images/upload.png" alt="" @click="goUpload" />
-        <div class="item" v-for="model in category1ModelGrid" :key="model.modelId">
-          <img :src="model.src" />
+        <img
+          class="uploadItem"
+          :key="10086"
+          src="@/assets/images/upload.png"
+          alt=""
+          @click="goUpload"
+        />
+        <div class="item"  v-for="model in category1ModelGrid"
+            :key="model.modelId">
+          <img :src="loadImage(model.src)"/>
           <div class="masonry-shadow">
-            <div class="masonry-name">{{ model.desc }}</div>
+            <div class="masonry-name">{{model.title}}</div>
             <div class="masonry-flex">
               <div class="masonry-img">
                 <img class="masonry-ell" src="@/assets/images/Ellipse6.png" alt="" />
@@ -78,14 +92,17 @@
 <script>
 import { getModelGridByCategoty1 } from "../../api/modelinfo";
 import data from "./data.json";
-import { getModelInfoForMainFrame } from "@/api/modelinfo.js";
+import {getModelInfoForMainFrame} from "@/api/modelinfo.js";
+import defaultImage from "@/assets/images/emc/image 9.png";
+import storage from "@/plugins/storage";
 
 export default {
   name: "modelForm",
   components: {},
   data() {
     return {
-      checked: "全部",
+      custId:storage.getItem('custId'),
+      checked: "ALL",
       data,
       messages: [],
       category1ModelGrid: []
@@ -96,36 +113,42 @@ export default {
     this.initCategory1Models();
   },
   methods: {
-    initThematicModels() {
-      this.messages = getModelInfoForMainFrame();
-    },
-    initCategory1Models() {
-      this.category1ModelGrid = getModelGridByCategoty1();
-    },
-    changeChecked(value) {
-      this.checked = value;
+  loadImage(value){
+    if (value === undefined) {
+      return defaultImage;
+    }
+    return value;
+  },
+  initThematicModels(){
+    this.messages = getModelInfoForMainFrame();
+  },
+  initCategory1Models() {
+    this.category1ModelGrid = getModelGridByCategoty1();
+  },
+  changeChecked(value){
+    this.checked = value;
 
-      // 当选择全部时不传category1参数，后端降级查全部
-      const param = value === '全部' ? null : value;
-      this.category1ModelGrid = getModelGridByCategoty1(param);
-    },
-    shopEntry(id) {
+    // 当选择全部时不传category1参数，后端降级查全部
+    const param = value === 'All' ? null : value;
+    this.category1ModelGrid = getModelGridByCategoty1(param);
+  },
+  shopEntry(id) {
       this.$router.push({
         path: "/modelDetail", query: {
           modelId: id
         }
       });
     },
-    goUpload() {
-      this.$router.push("shopEntry");
-    },
-    goSubject() {
-      this.$router.push("Merchant");
-    },
-  }
-  ,
+  goUpload() {
+    this.$router.push("shopEntry");
+  },
+  goSubject() {
+    this.$router.push("Merchant");
+  },
 }
-  ;
+,
+}
+;
 </script>
 <style lang="scss" scoped>
 .model-content {
