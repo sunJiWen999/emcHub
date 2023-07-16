@@ -42,7 +42,7 @@
         </li>
         
         <li>
-          <Button slot="append" v-bind:class="{check:checked==='全部'}" @click="changeChecked('全部')">全部</Button>
+          <Button slot="append" v-bind:class="{check:checked==='All'}" @click="changeChecked('All')">All</Button>
         </li>
         <li>
           <Button slot="append" v-bind:class="{check:checked==='Checkpoint'}" @click="changeChecked('Checkpoint')">Checkpoint</Button>
@@ -51,10 +51,10 @@
           <Button slot="append" v-bind:class="{check:checked==='Lora'}" @click="changeChecked('Lora')">Lora</Button>
         </li>
         <li>
-          <Button slot="append" v-bind:class="{check:checked==='ControInet'}" @click="changeChecked('ControInet')">ControInet</Button>
+          <Button slot="append" v-bind:class="{check:checked==='Controlnet'}" @click="changeChecked('Controlnet')">Controlnet</Button>
         </li>
         <li>
-          <Button slot="append" v-bind:class="{check:checked==='其他'}" @click="changeChecked('其他')">其他</Button>
+          <Button slot="append" v-bind:class="{check:checked==='Other'}" @click="changeChecked('Other')">Other</Button>
         </li>
       </ul>
 
@@ -134,7 +134,7 @@ export default {
     this.checked = value;
 
     // 当选择全部时不传category1参数，后端降级查全部
-    const param = value === '全部' ? null : value;
+    const param = value === 'All' ? null : value;
     this.category1ModelGrid = getModelGridByCategoty1(param);
   },
   shopEntry(id) {
