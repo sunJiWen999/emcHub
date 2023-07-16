@@ -14,12 +14,12 @@
             :key="model.modelId"
           >
             <div class="model-card-item" @click="shopEntry(model.modelId)">
-              <img class="model-img" :src="model.src"/>
+              <img class="model-img" :src="loadImage(model.src)"/>
               <div class="model-card-shadow">
                 <div class="model-card-content">
                   <div>
 <!--                    <div>{{ model.modelName }}</div>-->
-                    <div>{{model.desc}}</div>
+                    <div>{{model.title}}</div>
                     <div>{{model.time}}</div>
                   </div>
                   <div>
@@ -68,9 +68,9 @@
         />
         <div class="item"  v-for="model in category1ModelGrid"
             :key="model.modelId">
-          <img :src="model.src"/>
+          <img :src="loadImage(model.src)"/>
           <div class="masonry-shadow">
-            <div class="masonry-name">{{model.desc}}</div>
+            <div class="masonry-name">{{model.title}}</div>
             <div class="masonry-flex">
               <div class="masonry-img">
                 <img
@@ -100,6 +100,7 @@
 import { getModelGridByCategoty1 } from "../../api/modelinfo";
 import data from "./data.json";
 import {getModelInfoForMainFrame} from "@/api/modelinfo.js";
+import defaultImage from "@/assets/images/emc/image 9.png";
 
 export default {
   name: "modelForm",
@@ -117,6 +118,12 @@ export default {
     this.initCategory1Models();
   },
   methods: {
+  loadImage(value){
+    if (value === undefined) {
+      return defaultImage;
+    }
+    return value;
+  },
   initThematicModels(){
     this.messages = getModelInfoForMainFrame();
   },
