@@ -29,7 +29,7 @@
         </Button>
       </div>
       <div class="modal-button-bottom">
-        <Button @click="getLogin">
+        <Button @click="logWithWallet">
           <img src="@/assets/images/logo-tittle.png"/>
           <span>IC-WAllET</span>
         </Button>
@@ -72,6 +72,7 @@
 <script>
 
 import {authTokenSet, LoginByPassWD, userRegOrigin} from "@/api/login";
+import { instance as emcAuthClient } from '@/plugins/auth';
 import storage from "@/plugins/storage";
 
 export default {
@@ -128,6 +129,18 @@ export default {
         }
 
       });
+    },
+    logWithWallet() {
+      emcAuthClient.login({
+        onSuccess: (message) => {
+          //{"type": "authorize-success","data": "tdvch-tx3ik-r2bzp-pncic-ahjes-57rvk-oa6qu-blzh2-brbs5-x67zv-jae"}
+          console.info('success', message);
+        },
+        onError(message) {
+          console.info(message);
+        },
+      });
+
     },
     commitReg() {
       this.regInfo.bussData.applRegInfo = JSON.stringify(this.regInfoBussData);

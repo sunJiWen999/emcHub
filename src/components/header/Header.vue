@@ -54,28 +54,27 @@
             </li>
           </ul>
         </div>
-        <div class="box-records">交易记录</div>
-        <div class="box-logout">退出登陆</div>
+        <div class="box-records">Tranactions</div>
+        <div class="box-logout" @click="logOut">LOGOUT</div>
       </div>
     </Card>
-<!--登录-->
-    <Modal v-if="!custId" :styles="{ top: '20vh' }"
-           width="755px" class-name="vertical-center-modal" v-model="loginVisible" draggable
-      :mask="true" :footer-hide="true">
+    <!--登录-->
+    <Modal v-if="!custId" :styles="{ top: '20vh' }" width="755px" class-name="vertical-center-modal"
+      v-model="loginVisible" draggable :mask="true" :footer-hide="true">
       <div class="modal-div">
         <img class="modal-ing1" src="@/assets/images/logo-tittle.png" />
         <img class="modal-img2" src="@/assets/images/EMCHub.png" />
       </div>
-        <Form style="margin-top: 30px;width: 100%;display: flex;flex-direction: column;
-        align-items: center" ref="ruleValidate" :model="userLoginInfo"
-              label-position="left" :label-width="90" :rules="ruleValidate">
-          <FormItem label="UserLogInId" prop="UserLogInId">
-            <Input v-model="userLoginInfo.custId"></Input>
-          </FormItem>
-          <FormItem label="AuthToken" prop="AuthToken">
-            <Input v-model="userLoginInfo.bussData.authToken"></Input>
-          </FormItem>
-        </Form>
+      <Form style="margin-top: 30px;width: 100%;display: flex;flex-direction: column;
+        align-items: center" ref="ruleValidate" :model="userLoginInfo" label-position="left" :label-width="90"
+        :rules="ruleValidate">
+        <FormItem label="UserLogInId" prop="UserLogInId">
+          <Input v-model="userLoginInfo.custId"></Input>
+        </FormItem>
+        <FormItem label="AuthToken" prop="AuthToken">
+          <Input v-model="userLoginInfo.bussData.authToken"></Input>
+        </FormItem>
+      </Form>
       <div class="modal-button-bottom">
         <Button @click="getLogin">
           <img src="@/assets/images/logo-tittle.png" />
@@ -89,35 +88,32 @@
         </Button>
       </div>
       <div class="modal-button-bottom">
-        <Button @click="getLogin">
+        <Button @click="logWithWallet">
           <img src="@/assets/images/logo-tittle.png" />
           <span>IC-WAllET</span>
         </Button>
       </div>
     </Modal>
 
-    <Modal :styles="{ top: '20vh' }"  width="755px" class-name="vertical-center-modal"
-      v-model="regVisible" draggable :mask="true" :footer-hide="true">
+    <Modal :styles="{ top: '20vh' }" width="755px" class-name="vertical-center-modal" v-model="regVisible" draggable
+      :mask="true" :footer-hide="true">
       <div class="modal-div">
         <img class="modal-ing1" src="@/assets/images/logo-tittle.png" />
       </div>
-        <Form class="register"
-       :model="userLoginInfo"
-          label-position="left"
-              :rules="ruleValidate">
-          <FormItem label="loginId" prop="LogInId">
-            <Input v-model="regInfoBussData.loginId"></Input>
-          </FormItem>
-          <FormItem label="email" prop="email">
-            <Input v-model="regInfoBussData.email"></Input>
-          </FormItem>
-          <FormItem label="mobilePhone" prop="mobilePhone">
-            <Input v-model="regInfoBussData.mobilePhone"></Input>
-          </FormItem>
-          <FormItem label="authToken" prop="authToken">
-            <Input v-model="authInfoData.bussData.authToken"></Input>
-          </FormItem>
-        </Form>
+      <Form class="register" :model="userLoginInfo" label-position="left" :rules="ruleValidate">
+        <FormItem label="loginId" prop="LogInId">
+          <Input v-model="regInfoBussData.loginId"></Input>
+        </FormItem>
+        <FormItem label="email" prop="email">
+          <Input v-model="regInfoBussData.email"></Input>
+        </FormItem>
+        <FormItem label="mobilePhone" prop="mobilePhone">
+          <Input v-model="regInfoBussData.mobilePhone"></Input>
+        </FormItem>
+        <FormItem label="authToken" prop="authToken">
+          <Input v-model="authInfoData.bussData.authToken"></Input>
+        </FormItem>
+      </Form>
 
       <div class="modal-button-bottom">
         <Button @click="commitReg">
@@ -134,6 +130,7 @@
 import storage from "@/plugins/storage.js";
 import { logout } from "@/api/account.js";
 import { LoginByPassWD, userRegOrigin, authTokenSet } from "@/api/login";
+import { instance as emcAuthClient } from '@/plugins/auth';
 
 
 export default {
@@ -147,7 +144,7 @@ export default {
     return {
       loginVisible: false,
       regVisible: false,
-      custId:storage.getItem('custId'), // 用户信息
+      custId: storage.getItem('custId'), // 用户信息
       userLoginInfo: {
         custId: "1111",
         bussData: {
@@ -191,25 +188,25 @@ export default {
           id: 1,
           num: 12,
           src: require("@/assets/images/Book.png"),
-          tittle: "我的创作",
+          tittle: "My model",
         },
         {
           id: 2,
           num: 12,
           src: require("@/assets/images/Adduser.png"),
-          tittle: "我的下载",
+          tittle: "My download",
         },
         {
           id: 3,
           num: 12,
           src: require("@/assets/images/Target.png"),
-          tittle: "我的粉丝",
+          tittle: "My fans",
         },
         {
           id: 4,
           num: 12,
           src: require("@/assets/images/Storage.png"),
-          tittle: "我的关注",
+          tittle: "Notes",
         },
       ],
     };
@@ -217,8 +214,24 @@ export default {
   computed: {
   },
   methods: {
-    login(){
+    login() {
       this.$router.push('/login')
+    },
+    logWithWallet() {
+      emcAuthClient.login({
+        onSuccess: (message) => {
+          //{"type": "authorize-success","data": "tdvch-tx3ik-r2bzp-pncic-ahjes-57rvk-oa6qu-blzh2-brbs5-x67zv-jae"}
+          console.info('success', message);
+        },
+        onError(message) {
+          console.info(message);
+        },
+      });
+
+    },
+    logOut() {
+      storage.removeItem('custId');
+      this.custId = '';
     },
     goCreate() {
       this.$router.push('/Create')
@@ -233,9 +246,9 @@ export default {
       LoginByPassWD(this.userLoginInfo).then(res => {
         if (res.loginStatus === 'true') {
           this.hasLogin = true;
-          this.loginVisible=false
-          storage.setItem('custId',this.userInfo.custId)
-          this.$router.push('/login')
+          this.loginVisible = false
+          storage.setItem('custId', this.userInfo.custId)
+          //this.$router.push('/login')
         } else {
           alert("Login fail");
         }
@@ -272,8 +285,7 @@ export default {
         }
       })
     }
-
-
+    
   },
 };
 </script>
@@ -652,10 +664,11 @@ export default {
       font-weight: 500;
       position: absolute;
       top: calc(50% - 18px);
-      left:calc(50% - 15px);
+      left: calc(50% - 15px);
     }
   }
 }
+
 /deep/ .ivu-form-item-error .ivu-input {
   border: 1px solid #BF61F9;
 }
@@ -667,7 +680,8 @@ export default {
   background: rgba(0, 0, 0, 0.10);
   height: 40px;
 }
-.register{
+
+.register {
   display: flex;
   flex-direction: column;
   justify-content: center;
