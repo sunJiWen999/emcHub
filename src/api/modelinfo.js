@@ -15,13 +15,13 @@ export function getModelInfoForMainFrame() {
         for (var i = 0; i < modelListres.length; i++) {
             var modelInfoItem = {};
             var modelInfo = modelListres[i];
-            modelInfoItem.id = modelInfo.modelId;
+            modelInfoItem.modelId = modelInfo.modelId;
             modelInfoItem.title = modelInfo.modelName;
             modelInfoItem.desc = modelInfo.modelSubName;
             if (modelInfo !== undefined && modelInfo.modelCover !== undefined && modelInfo.modelCover.coverImgList !== undefined) {
                 modelInfoItem.src = JSON.parse(modelInfo.modelCover.coverImgList)[0];
             }
-            modelInfoItem.num = 322;
+            modelInfoItem.num = 0;
             modeInfoGrid.push(modelInfoItem);
             //console.log(modeInfoGrid[i], "99999977777777777777777777");
         } 
@@ -102,6 +102,22 @@ export function addModelBaseInfo(param) {
         data: param
     });
 
+}
+
+/**
+ * queryModelDetailInfo.do
+ * @param {*} param 
+ * @returns 
+ */
+export function queryModelDetailInfo(param) {
+    if(param.custId ==  null){
+        param.custId ='PUBLIC';
+    }
+    return request ({
+        url:'queryModelDetailInfo.do',
+        method:'POST',
+        data:param
+    });
 }
 
 

@@ -28,7 +28,13 @@
           <!--                 class="model-uploadFour-tag">{{ item }}-->
           <!--            </Tag>-->
           <!--          </FormItem>-->
-          <FormItem label="手动输入" prop="category2">
+<!--          <FormItem label="帖子标签" prop="name">-->
+<!--            <Tag v-for="item in tagList" closable :name="item"-->
+<!--                 @on-close="handleClose2"-->
+<!--                 class="model-uploadFour-tag">{{ item }}-->
+<!--            </Tag>-->
+<!--          </FormItem>-->
+          <FormItem label="Input" prop="category2">
             <Input style="width: 100%" v-model="formValidate.category2"></Input>
             <!--            <Button class="model-uploadFour-but" @click="addTag">添加</Button>-->
           </FormItem>
@@ -38,14 +44,14 @@
         </Form>
       </div>
     </div>
-    <span class="model-uploadFour-span">上传模型缩略图，不限尺寸</span>
-    <span class="model-uploadFour-span-oldUpload">已上传</span>
+    <span class="model-uploadFour-span">upload model cover images</span>
+    <span class="model-uploadFour-span-oldUpload">uploading</span>
     <div class="model-uploadFour-bottom" v-for="(item,index) in fileIdList"
          :key="index">
       <div>
         <img class="model-uploadFour-img"
              :src="item"/>
-        <Button class="model-uploadFour-img-but" @click="del(item)">删除</Button>
+        <Button class="model-uploadFour-img-but" @click="del(item)">del</Button>
       </div>
       <!--      <div>-->
       <!--        <img class="model-uploadFour-img" src="@/assets/images/emc/image 9.png"/>-->
@@ -61,8 +67,8 @@
       <!--      </div>-->
     </div>
     <div style="text-align: center">
-      <Button class="upload-content-xia" @click="up">上一步</Button>
-      <Button style="margin-left: 10px" class="upload-content-xia" @click="handleAdd('formValidateFour')">发布</Button>
+      <Button class="upload-content-xia" @click="up">Pre...</Button>
+      <Button style="margin-left: 10px" class="upload-content-xia" @click="handleAdd('formValidateFour')">Public</Button>
     </div>
   </div>
 </template>
@@ -77,7 +83,7 @@ export default {
     return {
       uploadAction: BASE.API_PROD.emchub + '/fileUpload.do',
       fileIdList: [],
-      tagList: ['标签一'],
+      tagList: ['Lable one'],
       formValidate: {
         tips: '',
         category2: ''
@@ -296,6 +302,7 @@ export default {
   font-style: normal;
   font-weight: 500;
   line-height: 24px;
+  margin-top: 20px;
 }
 
 .model-uploadFour-bottom {

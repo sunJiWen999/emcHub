@@ -1,11 +1,7 @@
 <template>
   <div class="model-form">
     <div class="model-content">
-      <img
-        class="model-thematic"
-        src="@/assets/images/ThematicModels.png"
-        alt=""
-      />
+      <img class="model-thematic" src="@/assets/images/ThematicModels.png" alt="" />
       <div class="model-card">
         <Row :gutter="16">
           <Col
@@ -45,10 +41,11 @@
           <Button slot="append" v-bind:class="{check:checked==='All'}" @click="changeChecked('All')">All</Button>
         </li>
         <li>
-          <Button slot="append" v-bind:class="{check:checked==='Checkpoint'}" @click="changeChecked('Checkpoint')">Checkpoint</Button>
+          <Button slot="append" v-bind:class="{ check: checked === 'Checkpoint' }"
+            @click="changeChecked('Checkpoint')">Checkpoint</Button>
         </li>
         <li>
-          <Button slot="append" v-bind:class="{check:checked==='Lora'}" @click="changeChecked('Lora')">Lora</Button>
+          <Button slot="append" v-bind:class="{ check: checked === 'Lora' }" @click="changeChecked('Lora')">Lora</Button>
         </li>
         <li>
           <Button slot="append" v-bind:class="{check:checked==='Controlnet'}" @click="changeChecked('Controlnet')">Controlnet</Button>
@@ -73,11 +70,7 @@
             <div class="masonry-name">{{model.title}}</div>
             <div class="masonry-flex">
               <div class="masonry-img">
-                <img
-                  class="masonry-ell"
-                  src="@/assets/images/Ellipse6.png"
-                  alt=""
-                />
+                <img class="masonry-ell" src="@/assets/images/Ellipse6.png" alt="" />
                 <span>WaveWSBS</span>
               </div>
               <div class="masonry-num">
@@ -109,7 +102,7 @@ export default {
   data() {
     return {
       custId:storage.getItem('custId'),
-      checked:"全部",
+      checked: "ALL",
       data,
       messages: [],
       category1ModelGrid: []
@@ -139,8 +132,12 @@ export default {
     this.category1ModelGrid = getModelGridByCategoty1(param);
   },
   shopEntry(id) {
-    this.$router.push("modelDetail");
-  },
+      this.$router.push({
+        path: "/modelDetail", query: {
+          modelId: id
+        }
+      });
+    },
   goUpload() {
     this.$router.push("shopEntry");
   },
@@ -159,6 +156,7 @@ export default {
   height: 100%;
   background: #fff;
 }
+
 .model-form {
   height: 100%;
   position: relative;
@@ -183,6 +181,7 @@ export default {
 .model-card-item {
   position: relative;
   height: 357.136px;
+
   // background: #04ad11;
   .model-img {
     width: 100%;
@@ -219,7 +218,7 @@ export default {
   padding: 1px;
 }
 
-.check{
+.check {
   background: #333;
   color: #fff;
 }
@@ -273,6 +272,7 @@ export default {
 .masonry {
   column-count: 5;
   column-gap: 10px;
+
   // padding: 10px;
   .uploadItem {
     width: 100%;

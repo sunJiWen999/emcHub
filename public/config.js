@@ -1,17 +1,19 @@
 var BASE = {
   /**
    * @description api请求基础路径
-   * API_DEV: {
-    emchub: "http://192.168.0.103:8081/mrchaiemc",
+   */
+  /*API_DEV: {
+    emchub: "http://192.168.0.105:9080/mrchaiemc",
   },
   API_PROD: {
-    emchub: "http://192.168.0.103:8081/mrchaiemc",
-  },
-   */
+    emchub: "http://192.168.0.105:9080/mrchaiemc",
+  }
+  */
+   
   API_DEV: {
     emchub: "http://36.155.7.134:9080/mrchaiemc",
   },
   API_PROD: {
     emchub: "http://36.155.7.134:9080/mrchaiemc",
-  },
+  }
 };

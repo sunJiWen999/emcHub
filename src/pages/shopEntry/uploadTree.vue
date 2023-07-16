@@ -37,12 +37,12 @@
       :action="uploadAction">
       <img src="@/assets/images/emc/Vector.png"/>
     </Upload>
-    <span class="model-upload-three-span">最多添加5个文件，支持ckpt、pt、safetensors、bin、zip文件</span>
-    <span class="model-upload-three-oldUpload">已上传</span>
+    <span class="model-upload-three-span">Maxisum 5 files，support ckpt、pt、safetensors、bin、zip </span>
+    <span class="model-upload-three-oldUpload">UPLOADED</span>
     <div class="model-upload-three-bottom" v-for="(item) in fileIdList">
       <div style="display: flex;flex-direction: row;justify-content: space-between">
         <span class="span-url">{{item.name}}</span>
-        <Button class="but-del" @click="del(item.name)">删除</Button>
+        <Button class="but-del" @click="del(item.name)">DELETE</Button>
       </div>
 <!--      <div style="display: flex;flex-direction: row;justify-content: space-between;margin-top: 10px">-->
 <!--        <span class="span-url">文件名称.zip</span>-->
@@ -52,14 +52,14 @@
     <div style="display: flex;flex-direction: row;justify-content: center">
       <Button class="upload-content-xia"
               @click="handleSubmit"
-      >下一步
+      >Next
       </Button
       >
       <Button
         class="upload-content-xia"
         style="margin-left: 30px"
         @click="up"
-      >上一步
+      >Pre...
       </Button
       >
     </div>
@@ -105,7 +105,7 @@ export default {
       this.$Message.success(`upload${file.response.resultCode}`)
     },
     handleFormatError (file) {
-      this.$Message.error("非'ckpt'||'pt'||'safetensors'||'bin'||'zip'格式的文件，请重111新选择！");
+      this.$Message.error("not 'ckpt'||'pt'||'safetensors'||'bin'||'zip' formatter, please re-choose");
       return false;
     },
     handleMaxSize (file) {
@@ -118,7 +118,7 @@ export default {
       let fileName = file.name;
       let suffix = fileName.substr(fileName.lastIndexOf('.'));
       if (suffix != '.ckpt' &&suffix != '.pt'&&suffix != '.safetensors'&&suffix != '.bin'&&suffix != '.zip') {
-        this.$Message.error('非ckpt,pt,safetensors,zip格式的文件，请重新选择！');
+        this.$Message.error('not ckpt,pt,safetensors,zip formatter files, please re-choose');
         return false;
       }
     },

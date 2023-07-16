@@ -5,7 +5,7 @@
           label-position="top"
           :rules="ruleValidate"
     >
-      <FormItem label="版本编号" prop="version">
+      <FormItem label="Model Version" prop="version">
         <Input v-model="formValidate.version"></Input>
       </FormItem>
 <!--      <FormItem label="基础类型" prop="city">-->
@@ -18,21 +18,21 @@
 <!--        <Tag closable class="model-uploadFirst-tag">触发词</Tag>-->
 <!--        <Input v-model="formValidate.version"/>-->
 <!--      </FormItem>-->
-      <FormItem label='版本说明' prop="modelDesc">
+      <FormItem label='Detail description' prop="modelDesc">
         <Input v-model="formValidate.modelDesc" type="textarea" :autosize="{minRows: 10,maxRows: 10}"
         ></Input>
       </FormItem>
       <FormItem style="display: flex;flex-direction: row;justify-content: center">
         <Button class="upload-content-xia"
                 @click="handleSubmit('formValidateTwo')"
-        >下一步
+        >Next
         </Button
         >
         <Button
           class="upload-content-xia"
           style="margin-left: 30px"
           @click="up"
-        >上一步
+        >Pre...
         </Button
         >
       </FormItem>

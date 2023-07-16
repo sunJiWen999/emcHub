@@ -75,30 +75,7 @@
         </RadioGroup>
       </FormItem>
 
-<!--        <div v-for="(item,index) in modelUseDetail" :key="index">-->
-<!--          <div style="display: flex;flex-direction: row">-->
-<!--            <div class="model-use-daGou"-->
-<!--                 @click="getAgreeShow()"-->
-<!--                 :class="agreeShow ? 'tick' : ' '"-->
-<!--            ></div>-->
-<!--            <span class="model-zi">{{item}}</span>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div style="display: flex;flex-direction: row">-->
-<!--          <div class="model-use-daGou"-->
-<!--            @click="getAgreeShow()"-->
-<!--            :class="agreeShow ? 'tick' : ' '"-->
-<!--          ></div>-->
-<!--          <span class="model-zi">使用时注册出处</span>-->
-<!--        </div>-->
-<!--        <div style="display: flex;flex-direction: row;margin-top: 10px">-->
-<!--          <div class="model-use-daGou"-->
-<!--               @click="getAgreeShow()"-->
-<!--               :class="agreeShow ? 'tick' : ' '"-->
-<!--          ></div>-->
-<!--          <span class="model-zi">共享此模型的文件</span>-->
-<!--        </div>-->
-<!--      </FormItem>-->
+
       <FormItem style="text-align: center">
         <Button  class="upload-content-xia"
                  @click="handleSubmit('formValidateFirst')">Next</Button>
@@ -114,7 +91,7 @@ export default {
   data() {
     return {
       modelUseDetail:['1','2'],
-      agreeShow: false, // 控制点击
+      agreeShow: false, 
       agreeShowTwo:true,
       formValidate: {
         modelName: '',
