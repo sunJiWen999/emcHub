@@ -18,8 +18,9 @@ export function getModelInfoForMainFrame() {
             modelInfoItem.id = modelInfo.modelId;
             modelInfoItem.title = modelInfo.modelName;
             modelInfoItem.desc = modelInfo.modelSubName;
-            console.log(modelInfo.modelCover[0], "modelcover");
-            modelInfoItem.src =  modelInfo.modelCover[0]  ;
+            if (modelInfo !== undefined && modelInfo.modelCover !== undefined && modelInfo.modelCover.coverImgList !== undefined) {
+                modelInfoItem.src = JSON.parse(modelInfo.modelCover.coverImgList)[0];
+            }
             modelInfoItem.num = 322;
             modeInfoGrid.push(modelInfoItem);
             //console.log(modeInfoGrid[i], "99999977777777777777777777");
@@ -43,7 +44,9 @@ export function getModelGridByCategoty1(category){
             modelInfoItem.id = modelInfo.modelId;
             modelInfoItem.title = modelInfo.modelName;
             modelInfoItem.desc = modelInfo.modelSubName;
-            modelInfoItem.src = modelInfo.modelCover[0]  ;
+            if (modelInfo !== undefined && modelInfo.modelCover !== undefined && modelInfo.modelCover.coverImgList !== undefined) {
+                modelInfoItem.src = JSON.parse(modelInfo.modelCover.coverImgList)[0];
+            }
             modeInfoGrid.push(modelInfoItem);
         }
 
