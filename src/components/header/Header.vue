@@ -285,7 +285,7 @@ export default {
         }
       })
     }
-    
+
   },
 };
 </script>
@@ -308,10 +308,11 @@ export default {
   box-shadow: 0px 2px 20px 0px rgba(98, 56, 123, 0.06);
   //@include background_color($light_white_background_color);
 
-  .box-information {
-    width: 319px;
-    height: 299px;
-  }
+  //.box-information {
+  //  width: 319px;
+  //  height: 299px;
+  //  //background: #04ad11;
+  //}
 }
 
 
@@ -463,14 +464,15 @@ export default {
   position: absolute;
   top: 87px;
   right: 7.3%;
-  width: 319px;
+  //width: 360px;
   height: 299px;
+  //background: #04ad11;
   z-index: 99999;
 }
 
 .box-sigle {
   margin: 15px 9px 9px 5px;
-  width: 276px;
+  //width: 276px;
   height: 240px;
 
   // background: #e5aeff;
@@ -514,19 +516,26 @@ export default {
     margin: 30px 10px 27px 0px;
     height: 72px;
     width: 100%;
+    ul{
+      display: flex;
+      flex-direction: row;
+    }
 
     // background: #dadce0;
     li {
-      width: 48px;
+      flex: 1;
+      width: 70px;
       height: 72px;
+      text-align: center;
+      //background: #4d9cf1;
     }
 
     li:nth-child(2) {
-      margin: 0 28px;
+      margin: 0 20px;
     }
 
     li:nth-child(3) {
-      margin-right: 28px;
+      margin-right: 20px;
     }
 
     .box-num {
@@ -535,7 +544,7 @@ export default {
     }
 
     .box-img {
-      margin-left: 6px;
+      //margin-left: 6px;
       width: 39px;
       height: 39px;
     }
