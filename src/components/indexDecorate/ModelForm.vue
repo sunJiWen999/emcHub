@@ -33,14 +33,14 @@
         </Row>
       </div>
       <ul class="model-waterfall">
-        <li>
+        <li v-if="custId">
           <img
             class="model-Recommended"
             src="@/assets/images/Recommended.png"
             alt=""
           />
         </li>
-        
+
         <li>
           <Button slot="append" v-bind:class="{check:checked==='All'}" @click="changeChecked('All')">All</Button>
         </li>
@@ -101,12 +101,14 @@ import { getModelGridByCategoty1 } from "../../api/modelinfo";
 import data from "./data.json";
 import {getModelInfoForMainFrame} from "@/api/modelinfo.js";
 import defaultImage from "@/assets/images/emc/image 9.png";
+import storage from "@/plugins/storage";
 
 export default {
   name: "modelForm",
   components: {},
   data() {
     return {
+      custId:storage.getItem('custId'),
       checked:"全部",
       data,
       messages: [],
