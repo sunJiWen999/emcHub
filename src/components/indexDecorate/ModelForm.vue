@@ -1,83 +1,62 @@
 <template>
   <div class="model-form">
     <div class="model-content">
-      <img
-        class="model-thematic"
-        src="@/assets/images/ThematicModels.png"
-        alt=""
-      />
+      <img class="model-thematic" src="@/assets/images/ThematicModels.png" alt="" />
       <div class="model-card">
         <Row :gutter="16">
-          <Col
-            class="model-card-col"
-            v-for="model in messages"
-            :key="model.modelId"
-          >
-            <div class="model-card-item" @click="shopEntry(model.modelId)">
-              <img class="model-img" :src="model.src"/>
-              <div class="model-card-shadow">
-                <div class="model-card-content">
-                  <div>
-<!--                    <div>{{ model.modelName }}</div>-->
-                    <div>{{model.desc}}</div>
-                    <div>{{model.time}}</div>
-                  </div>
-                  <div>
-                    <img class="model-card-square" src="@/assets/images/emc/Vector1.png"/>
-                    <div>1343</div>
-                  </div>
+          <Col class="model-card-col" v-for="model in messages" :key="model.modelId">
+          <div class="model-card-item" @click="shopEntry(model.id)">
+            <img class="model-img" :src="model.src" />
+            <div class="model-card-shadow">
+              <div class="model-card-content">
+                <div>
+                  <!--                    <div>{{ model.modelName }}</div>-->
+                  <div>{{ model.desc }}</div>
+                  <div>{{ model.time }}</div>
+                </div>
+                <div>
+                  <img class="model-card-square" src="@/assets/images/emc/Vector1.png" />
+                  <div>1343</div>
                 </div>
               </div>
             </div>
+          </div>
           </Col>
         </Row>
       </div>
       <ul class="model-waterfall">
         <li>
-          <img
-            class="model-Recommended"
-            src="@/assets/images/Recommended.png"
-            alt=""
-          />
+          <img class="model-Recommended" src="@/assets/images/Recommended.png" alt="" />
         </li>
-        
+
         <li>
-          <Button slot="append" v-bind:class="{check:checked==='全部'}" @click="changeChecked('全部')">全部</Button>
+          <Button slot="append" v-bind:class="{ check: checked === '全部' }" @click="changeChecked('全部')">全部</Button>
         </li>
         <li>
-          <Button slot="append" v-bind:class="{check:checked==='Checkpoint'}" @click="changeChecked('Checkpoint')">Checkpoint</Button>
+          <Button slot="append" v-bind:class="{ check: checked === 'Checkpoint' }"
+            @click="changeChecked('Checkpoint')">Checkpoint</Button>
         </li>
         <li>
-          <Button slot="append" v-bind:class="{check:checked==='Lora'}" @click="changeChecked('Lora')">Lora</Button>
+          <Button slot="append" v-bind:class="{ check: checked === 'Lora' }" @click="changeChecked('Lora')">Lora</Button>
         </li>
         <li>
-          <Button slot="append" v-bind:class="{check:checked==='ControInet'}" @click="changeChecked('ControInet')">ControInet</Button>
+          <Button slot="append" v-bind:class="{ check: checked === 'ControInet' }"
+            @click="changeChecked('ControInet')">ControInet</Button>
         </li>
         <li>
-          <Button slot="append" v-bind:class="{check:checked==='其他'}" @click="changeChecked('其他')">其他</Button>
+          <Button slot="append" v-bind:class="{ check: checked === '其他' }" @click="changeChecked('其他')">其他</Button>
         </li>
       </ul>
 
       <div class="masonry">
-        <img
-          class="uploadItem"
-          :key="10086"
-          src="@/assets/images/upload.png"
-          alt=""
-          @click="goUpload"
-        />
-        <div class="item"  v-for="model in category1ModelGrid"
-            :key="model.modelId">
-          <img :src="model.src"/>
+        <img class="uploadItem" :key="10086" src="@/assets/images/upload.png" alt="" @click="goUpload" />
+        <div class="item" v-for="model in category1ModelGrid" :key="model.modelId">
+          <img :src="model.src" />
           <div class="masonry-shadow">
-            <div class="masonry-name">{{model.desc}}</div>
+            <div class="masonry-name">{{ model.desc }}</div>
             <div class="masonry-flex">
               <div class="masonry-img">
-                <img
-                  class="masonry-ell"
-                  src="@/assets/images/Ellipse6.png"
-                  alt=""
-                />
+                <img class="masonry-ell" src="@/assets/images/Ellipse6.png" alt="" />
                 <span>WaveWSBS</span>
               </div>
               <div class="masonry-num">
@@ -99,14 +78,14 @@
 <script>
 import { getModelGridByCategoty1 } from "../../api/modelinfo";
 import data from "./data.json";
-import {getModelInfoForMainFrame} from "@/api/modelinfo.js";
+import { getModelInfoForMainFrame } from "@/api/modelinfo.js";
 
 export default {
   name: "modelForm",
   components: {},
   data() {
     return {
-      checked:"全部",
+      checked: "全部",
       data,
       messages: [],
       category1ModelGrid: []
@@ -117,32 +96,36 @@ export default {
     this.initCategory1Models();
   },
   methods: {
-  initThematicModels(){
-    this.messages = getModelInfoForMainFrame();
-  },
-  initCategory1Models() {
-    this.category1ModelGrid = getModelGridByCategoty1();
-  },
-  changeChecked(value){
-    this.checked = value;
+    initThematicModels() {
+      this.messages = getModelInfoForMainFrame();
+    },
+    initCategory1Models() {
+      this.category1ModelGrid = getModelGridByCategoty1();
+    },
+    changeChecked(value) {
+      this.checked = value;
 
-    // 当选择全部时不传category1参数，后端降级查全部
-    const param = value === '全部' ? null : value;
-    this.category1ModelGrid = getModelGridByCategoty1(param);
-  },
-  shopEntry(id) {
-    this.$router.push("modelDetail");
-  },
-  goUpload() {
-    this.$router.push("shopEntry");
-  },
-  goSubject() {
-    this.$router.push("Merchant");
-  },
+      // 当选择全部时不传category1参数，后端降级查全部
+      const param = value === '全部' ? null : value;
+      this.category1ModelGrid = getModelGridByCategoty1(param);
+    },
+    shopEntry(id) {
+      this.$router.push({
+        path: "/modelDetail", query: {
+          modelId: id
+        }
+      });
+    },
+    goUpload() {
+      this.$router.push("shopEntry");
+    },
+    goSubject() {
+      this.$router.push("Merchant");
+    },
+  }
+  ,
 }
-,
-}
-;
+  ;
 </script>
 <style lang="scss" scoped>
 .model-content {
@@ -151,6 +134,7 @@ export default {
   height: 100%;
   background: #fff;
 }
+
 .model-form {
   height: 100%;
   position: relative;
@@ -175,6 +159,7 @@ export default {
 .model-card-item {
   position: relative;
   height: 357.136px;
+
   // background: #04ad11;
   .model-img {
     width: 100%;
@@ -211,7 +196,7 @@ export default {
   padding: 1px;
 }
 
-.check{
+.check {
   background: #333;
   color: #fff;
 }
@@ -265,6 +250,7 @@ export default {
 .masonry {
   column-count: 5;
   column-gap: 10px;
+
   // padding: 10px;
   .uploadItem {
     width: 100%;

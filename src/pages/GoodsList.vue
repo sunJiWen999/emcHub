@@ -13,114 +13,110 @@
       <Tag class="goods-detail-tag">作品标签</Tag>
     </div>
     <div style="margin-top: 20px">
-      <Button
-        style="margin-right: 10px"
-        :class="currentIndex===index?'goods-detail-v':'goods-detail-v1'"
-        @click="tagClick(index)"
-        v-for="(item,index) in banList"
-        :index="index">{{item}}
+      <Button style="margin-right: 10px" :class="currentIndex === index ? 'goods-detail-v' : 'goods-detail-v1'"
+        @click="tagClick(index)" v-for="(item, index) in banList" :index="index">{{ item }}
       </Button>
     </div>
     <div style="margin-top: 20px">
       <Row :gutter="16">
         <Col span="12">
-          <img src="@/assets/images/emc/image 9.png" class="goods-detail-img"/>
+        <img src="@/assets/images/emc/image 9.png" class="goods-detail-img" />
         </Col>
         <Col span="12">
-          <div class="goods-detail-right">
-            <ul class="goods-detail-ul1">
-              <li>模型类型</li>
-              <li>点赞数量</li>
-              <li>下载数量</li>
-              <li>更新时间</li>
-              <li>版本号</li>
-              <li>基础型号</li>
-            </ul>
-            <ul class="goods-detail-ul2">
-              <li>Loar</li>
-              <li>123</li>
-              <li>123</li>
-              <li>123</li>
-              <li>123</li>
-              <li>标准1.4</li>
-            </ul>
+        <div class="goods-detail-right">
+          <ul class="goods-detail-ul1">
+            <li>模型类型</li>
+            <li>点赞数量</li>
+            <li>下载数量</li>
+            <li>更新时间</li>
+            <li>版本号</li>
+            <li>基础型号</li>
+          </ul>
+          <ul class="goods-detail-ul2">
+            <li>Loar</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>标准1.4</li>
+          </ul>
+        </div>
+        <div class="goods-detail-user">
+          <img src="@/assets/images/emc/Ellipse 4.png" />
+          <div class="goods-detail-user-right">
+            <span>WaveWSBS</span>
+            <Button>关注</Button>
           </div>
-          <div class="goods-detail-user">
-            <img src="@/assets/images/emc/Ellipse 4.png"/>
-            <div class="goods-detail-user-right">
-              <span>WaveWSBS</span>
-              <Button>关注</Button>
-            </div>
+        </div>
+        <Divider></Divider>
+        <div style="margin-top: 20px">
+          <div class="goods-detail-init">
+            <span>Comment</span>
+            <p>initite</p>
           </div>
-          <Divider></Divider>
-          <div style="margin-top: 20px">
-            <div class="goods-detail-init">
-              <span>Comment</span>
-              <p>initite</p>
-            </div>
-          </div>
-          <div style="margin-top: 20px">
-            <div class="goods-detail-bottom">
-              <div class="goods-detail-bottom-top">
-                <img src="@/assets/images/emc/Ellipse 4.png"></img>
-                <div class="goods-detail-bottom-top-div">
-                  <span>WaveWSBS</span>
-                  <p>5个小时前</p>
-                </div>
-              </div>
-              <div class="goods-detail-bottom-bottom-div">
-                <span>是否需要任何最小数据集才能使人工智能生成逼真的照片？我使用的数据集有 50 个 img [不同的艺术风格]，但它仍然变成 3d 渲染/2d 图像，不现实。</span>
-               <div class="goods-detail-bottom-bottom-div-love">
-                 <img src="@/assets/images/emc/VectorLove.png"/><span>99</span>
-               </div>
+        </div>
+        <div style="margin-top: 20px">
+          <div class="goods-detail-bottom">
+            <div class="goods-detail-bottom-top">
+              <img src="@/assets/images/emc/Ellipse 4.png"></img>
+              <div class="goods-detail-bottom-top-div">
+                <span>WaveWSBS</span>
+                <p>5个小时前</p>
               </div>
             </div>
-            <div class="goods-detail-bottom">
-              <div class="goods-detail-bottom-top">
-                <img src="@/assets/images/emc/Ellipse 4.png"></img>
-                <div class="goods-detail-bottom-top-div">
-                  <span>WaveWSBS</span>
-                  <p>5个小时前</p>
-                </div>
-              </div>
-              <div class="goods-detail-bottom-bottom-div">
-                <span>是否需要任何最小数据集才能使人工智能生成逼真的照片？我使用的数据集有 50 个 img [不同的艺术风格]，但它仍然变成 3d 渲染/2d 图像，不现实。</span>
-                <div class="goods-detail-bottom-bottom-div-love">
-                  <img src="@/assets/images/emc/VectorLove.png"/><span>99</span>
-                </div>
-              </div>
-            </div>
-            <div class="goods-detail-bottom">
-              <div class="goods-detail-bottom-top">
-                <img src="@/assets/images/emc/Ellipse 4.png"></img>
-                <div class="goods-detail-bottom-top-div">
-                  <span>WaveWSBS</span>
-                  <p>5个小时前</p>
-                </div>
-              </div>
-              <div class="goods-detail-bottom-bottom-div">
-                <span>是否需要任何最小数据集才能使人工智能生成逼真的照片？我使用的数据集有 50 个 img [不同的艺术风格]，但它仍然变成 3d 渲染/2d 图像，不现实。</span>
-                <div class="goods-detail-bottom-bottom-div-love">
-                  <img src="@/assets/images/emc/VectorLove.png"/><span>99</span>
-                </div>
-              </div>
-            </div>
-            <div class="goods-detail-bottom">
-              <div class="goods-detail-bottom-top">
-                <img src="@/assets/images/emc/Ellipse 4.png"></img>
-                <div class="goods-detail-bottom-top-div">
-                  <span>WaveWSBS</span>
-                  <p>5个小时前</p>
-                </div>
-              </div>
-              <div class="goods-detail-bottom-bottom-div">
-                <span>是否需要任何最小数据集才能使人工智能生成逼真的照片？我使用的数据集有 50 个 img [不同的艺术风格]，但它仍然变成 3d 渲染/2d 图像，不现实。</span>
-                <div class="goods-detail-bottom-bottom-div-love">
-                  <img src="@/assets/images/emc/VectorLove.png"/><span>99</span>
-                </div>
+            <div class="goods-detail-bottom-bottom-div">
+              <span>是否需要任何最小数据集才能使人工智能生成逼真的照片？我使用的数据集有 50 个 img [不同的艺术风格]，但它仍然变成 3d 渲染/2d 图像，不现实。</span>
+              <div class="goods-detail-bottom-bottom-div-love">
+                <img src="@/assets/images/emc/VectorLove.png" /><span>99</span>
               </div>
             </div>
           </div>
+          <div class="goods-detail-bottom">
+            <div class="goods-detail-bottom-top">
+              <img src="@/assets/images/emc/Ellipse 4.png"></img>
+              <div class="goods-detail-bottom-top-div">
+                <span>WaveWSBS</span>
+                <p>5个小时前</p>
+              </div>
+            </div>
+            <div class="goods-detail-bottom-bottom-div">
+              <span>是否需要任何最小数据集才能使人工智能生成逼真的照片？我使用的数据集有 50 个 img [不同的艺术风格]，但它仍然变成 3d 渲染/2d 图像，不现实。</span>
+              <div class="goods-detail-bottom-bottom-div-love">
+                <img src="@/assets/images/emc/VectorLove.png" /><span>99</span>
+              </div>
+            </div>
+          </div>
+          <div class="goods-detail-bottom">
+            <div class="goods-detail-bottom-top">
+              <img src="@/assets/images/emc/Ellipse 4.png"></img>
+              <div class="goods-detail-bottom-top-div">
+                <span>WaveWSBS</span>
+                <p>5个小时前</p>
+              </div>
+            </div>
+            <div class="goods-detail-bottom-bottom-div">
+              <span>是否需要任何最小数据集才能使人工智能生成逼真的照片？我使用的数据集有 50 个 img [不同的艺术风格]，但它仍然变成 3d 渲染/2d 图像，不现实。</span>
+              <div class="goods-detail-bottom-bottom-div-love">
+                <img src="@/assets/images/emc/VectorLove.png" /><span>99</span>
+              </div>
+            </div>
+          </div>
+          <div class="goods-detail-bottom">
+            <div class="goods-detail-bottom-top">
+              <img src="@/assets/images/emc/Ellipse 4.png"></img>
+              <div class="goods-detail-bottom-top-div">
+                <span>WaveWSBS</span>
+                <p>5个小时前</p>
+              </div>
+            </div>
+            <div class="goods-detail-bottom-bottom-div">
+              <span>是否需要任何最小数据集才能使人工智能生成逼真的照片？我使用的数据集有 50 个 img [不同的艺术风格]，但它仍然变成 3d 渲染/2d 图像，不现实。</span>
+              <div class="goods-detail-bottom-bottom-div-love">
+                <img src="@/assets/images/emc/VectorLove.png" /><span>99</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
         </Col>
       </Row>
@@ -130,16 +126,27 @@
 </template>
 
 <script>
-
+import { queryModelDetailInfo } from "@/api/modelinfo.js";
 export default {
   name: "GoodsList",
+
+
   beforeRouteEnter(to, from, next) {
     window.scrollTo(0, 0);
     next();
   },
   data() {
     return {
+      paramData: {
+        custId: 'PUBLIC',
+        bussData: {
+          model_id: this.$route.query.modelId
+        }
+      },
+      modelDetailInfo: {
 
+
+      },
       banList: ['v5.0', 'v5.1', '5.2'],
       currentIndex: 0,
     };
@@ -149,7 +156,12 @@ export default {
   methods: {
     tagClick(index) {
       this.currentIndex = index
+    },
+    modelLoad() {
+
     }
+
+
   },
   components: {},
 };
@@ -187,7 +199,8 @@ export default {
   background: #BF61F9;
 
   /deep/ .ivu-tag-text {
-    color: #FFFFFF;;
+    color: #FFFFFF;
+    ;
   }
 }
 
@@ -398,28 +411,30 @@ export default {
       font-weight: 400;
       line-height: 20px;
     }
-    .goods-detail-bottom-bottom-div-love{
+
+    .goods-detail-bottom-bottom-div-love {
       position: absolute;
       right: 10px;
-      img{
+
+      img {
         width: 9px;
         height: 8px;
         flex-shrink: 0;
       }
-      span{
+
+      span {
         color: #444;
         font-family: Roboto;
         font-size: 12px;
         font-style: normal;
         font-weight: 400;
-        line-height: 12px; /* 100% */
+        line-height: 12px;
+        /* 100% */
       }
     }
 
   }
 }
 
-.ban-div {
-
-}
+.ban-div {}
 </style>

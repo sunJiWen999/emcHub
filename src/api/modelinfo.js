@@ -99,4 +99,20 @@ export function addModelBaseInfo(param) {
 
 }
 
+/**
+ * queryModelDetailInfo.do
+ * @param {*} param 
+ * @returns 
+ */
+export function queryModelDetailInfo(param) {
+    if(param.custId ==  null){
+        param.custId ='PUBLIC';
+    }
+    return request ({
+        url:'queryModelDetailInfo.do',
+        method:'POST',
+        data:param
+    });
+}
+
 
