@@ -143,9 +143,29 @@ export default {
           model_id: this.$route.query.modelId
         }
       },
+      modelInfo:{
+        modelId:'',
+        modelName:'',
+        modelSubName:'',
+        cateGory1:'',
+        cateGory2:'',
+        modelCover:{
+          coverImgList:[],
+          coverVideoList:[],
+          tips:[]
+        }
+      },
       modelDetailInfo: {
-
-
+        modelIdL:'',
+        modelDesc:'',
+        version:'',
+        downLoadLink,
+        guideLink,
+        paramsGuideLink,
+        invokeGuide,
+        negativePromts,
+        positivePromts,
+        commonParams
       },
       banList: ['v5.0', 'v5.1', '5.2'],
       currentIndex: 0,
@@ -157,7 +177,11 @@ export default {
     tagClick(index) {
       this.currentIndex = index
     },
-    modelLoad() {
+    modelLoad(paramData) {
+      queryModelDetailInfo(queryModelDetailInfo).then(res=>{
+        this.modelInfo=JSON.parse(res.bussData.modelInfo);
+        this.modelDetailInfo = JSON.parse(res.bussData.modelDetailInfo);
+      });
 
     }
 
