@@ -22,15 +22,15 @@
               label-position="top"
               :rules="ruleValidate"
         >
-<!--          <FormItem label="帖子标签" prop="name">-->
-<!--            <Tag v-for="item in tagList" closable :name="item"-->
-<!--                 @on-close="handleClose2"-->
-<!--                 class="model-uploadFour-tag">{{ item }}-->
-<!--            </Tag>-->
-<!--          </FormItem>-->
+          <!--          <FormItem label="帖子标签" prop="name">-->
+          <!--            <Tag v-for="item in tagList" closable :name="item"-->
+          <!--                 @on-close="handleClose2"-->
+          <!--                 class="model-uploadFour-tag">{{ item }}-->
+          <!--            </Tag>-->
+          <!--          </FormItem>-->
           <FormItem label="手动输入" prop="category2">
             <Input style="width: 100%" v-model="formValidate.category2"></Input>
-<!--            <Button class="model-uploadFour-but" @click="addTag">添加</Button>-->
+            <!--            <Button class="model-uploadFour-but" @click="addTag">添加</Button>-->
           </FormItem>
           <FormItem style="display: flex;flex-direction: row" label="搜索触发词" prop="tips">
             <Input style="width: 230px;margin-left: 10px" v-model="formValidate.tips"/>
@@ -47,18 +47,18 @@
              :src="item"/>
         <Button class="model-uploadFour-img-but" @click="del(item)">删除</Button>
       </div>
-<!--      <div>-->
-<!--        <img class="model-uploadFour-img" src="@/assets/images/emc/image 9.png"/>-->
-<!--        <Button class="model-uploadFour-img-but">删除</Button>-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <img class="model-uploadFour-img" src="@/assets/images/emc/image 9.png"/>-->
-<!--        <Button class="model-uploadFour-img-but">删除</Button>-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <img class="model-uploadFour-img" src="@/assets/images/emc/image 9.png"/>-->
-<!--        <Button class="model-uploadFour-img-but">删除</Button>-->
-<!--      </div>-->
+      <!--      <div>-->
+      <!--        <img class="model-uploadFour-img" src="@/assets/images/emc/image 9.png"/>-->
+      <!--        <Button class="model-uploadFour-img-but">删除</Button>-->
+      <!--      </div>-->
+      <!--      <div>-->
+      <!--        <img class="model-uploadFour-img" src="@/assets/images/emc/image 9.png"/>-->
+      <!--        <Button class="model-uploadFour-img-but">删除</Button>-->
+      <!--      </div>-->
+      <!--      <div>-->
+      <!--        <img class="model-uploadFour-img" src="@/assets/images/emc/image 9.png"/>-->
+      <!--        <Button class="model-uploadFour-img-but">删除</Button>-->
+      <!--      </div>-->
     </div>
     <div style="text-align: center">
       <Button class="upload-content-xia" @click="up">上一步</Button>
@@ -75,18 +75,18 @@ export default {
   name: "uploadFour.vue",
   data() {
     return {
-      uploadAction: BASE.API_PROD.emchub+'/fileUpload.do',
+      uploadAction: BASE.API_PROD.emchub + '/fileUpload.do',
       fileIdList: [],
       tagList: ['标签一'],
       formValidate: {
         tips: '',
-        category2:''
+        category2: ''
       },
       ruleValidate: {
         tips: [
           {required: true, message: 'The tips cannot be empty', trigger: 'blur'}
         ],
-        category2:[
+        category2: [
           {required: true, message: 'The category2 cannot be empty', trigger: 'blur'}
         ]
       }
@@ -94,10 +94,18 @@ export default {
   },
   props: {
     currentSub: {type: Function, require: true},
-    model_id: {type: String, require: true}
+    model_id: {type: String, require: true},
+    fourParams: {type: Object, require: true}
+  },
+  created() {
+    // let isObject = Object.keys(this.fourParams)
+    if (this.fourParams) {
+      this.fileIdList = this.fourParams.fileIdList
+      this.formValidate = this.fourParams.formValidate
+    }
   },
   methods: {
-    del(name){
+    del(name) {
       const index = this.fileIdList.indexOf(name);
       this.fileIdList.splice(index, 1);
     },
@@ -126,17 +134,21 @@ export default {
     handleBeforeUpload(file) {
       let fileName = file.name;
       let suffix = fileName.substr(fileName.lastIndexOf('.'));
-      console.log(suffix, 44444444444)
     },
     up() {
+      const modelInfo = {
+        fileIdList: this.fileIdList,
+        formValidate: this.formValidate
+      }
+      this.$emit('uploadFourModalParams', modelInfo)
       this.currentSub(1)
     },
     handleAdd() {
       let modelInfo = {
-        category2:this.tagList,
-        tips:this.formValidate.tips,
-        modelId:this.model_id,
-        // modelId: "0099243d-a166-4c9c-a0a4-e36ec9672de2",
+        // category2:this.tagList,
+        // tips:this.formValidate.tips,
+        ...this.formValidate,
+        modelId: this.model_id,
       }
       let modelCover = {
         coverImgList: JSON.stringify(this.fileIdList)

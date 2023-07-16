@@ -44,6 +44,8 @@
                 @uploadTreeModalParams="uploadTreeModalParams"
     />
     <uploadFour v-if="current === 3"
+                :fourParams="fourParams"
+                :uploadFourModalParams="uploadFourModalParams"
                 :currentSub="currentSub"
                 :model_id="model_id"
     />
@@ -63,7 +65,8 @@ export default {
       model_id: null,
       firstParams:null,
       twoParams:null,
-      treeParams:null
+      treeParams:null,
+      fourParams:null
     };
   },
   components: {
@@ -73,6 +76,9 @@ export default {
     uploadFour,
   },
   methods: {
+    uploadFourModalParams(val){
+      this.fourParams=val
+    },
     uploadFirstModelParams(val){
       this.firstParams=val
     },

@@ -76,21 +76,20 @@ export default {
     return {
       uploadAction: BASE.API_PROD.emchub+'/fileUpload.do',
       uid:null,
-      fileIdList:[
-      ]
+      fileIdList:[]
     }
   },
   props: {
     model_id:{type:String,require:true},
     currentSub: {type: Function, require: true},
     currentAdd: {type: Function, require: true},
-    treeParams:{type:Object,require:true}
+    treeParams:{type:Array,require:true}
   },
   created() {
-    console.log(this.treeParams,4444)
-    let modelDetail =JSON.parse(this.treeParams.bussData.modeldateil)
-    console.log(modelDetail,444)
-    // this.fileIdList=modelDetail.downloadLink
+
+    // let modelDetail =JSON.parse(this.treeParams.bussData.modeldateil)
+    // console.log(modelDetail,444)
+    this.fileIdList=this.treeParams||[]
   },
   methods: {
      del(name) {
@@ -137,7 +136,7 @@ export default {
         guideLink: null,
         paramsGuideLink: null,
         sampleCodeLink: null,
-        downloadLink:this.fileId,
+        downloadLink:fileId,
       }
       let params = {
         bussData:{
@@ -148,9 +147,8 @@ export default {
       console.log(params,44)
       // this.$emit('uploadTreeModalParams',params)
       modelUpload(params).then(res => {
-        console.log(res,4444444)
           if (res['resultCode'] === 'SUCCESS') {
-            this.$emit('uploadTreeModalParams',params)
+            this.$emit('uploadTreeModalParams',this.fileIdList)
             this.currentAdd(1)
           }
       })

@@ -134,7 +134,6 @@ export default {
   },
   changeChecked(value){
     this.checked = value;
-
     // 当选择全部时不传category1参数，后端降级查全部
     const param = value === 'All' ? null : value;
     this.category1ModelGrid = getModelGridByCategoty1(param);
