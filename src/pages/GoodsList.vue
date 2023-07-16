@@ -2,50 +2,49 @@
   <div class="goods-detail">
     <div style="margin-top: 20px;display: flex;flex-direction: row;justify-content: space-between">
       <div>
-        <span class="goods-detail-me">Mechanical fish</span>
-        <span class="goods-detail-time">最近更新时间：2023.07.09</span>
+        <span class="goods-detail-me">{{this.modelInfo.modelName}}</span>
+        <span class="goods-detail-time">The last modify time：</span>
       </div>
-      <img src="@/assets/images/emc/love.png" style="width: 44px;height: 39px;"></img>
+      <img src="@/assets/images/emc/love.png" style="width: 44px;height: 39px;"/>
     </div>
-    <div style="margin-top: 20px;font-family: Roboto;">
-      <Tag class="goods-detail-tag">作品标签</Tag>
-      <Tag class="goods-detail-tag">作品标签</Tag>
-      <Tag class="goods-detail-tag">作品标签</Tag>
+    <div   style="margin-top: 20px;font-family: Roboto;" >
+      <Tag  v-for="tag in this.modelInfo.cateGory2.split(',')"
+            :key="tag" class="goods-detail-tag">{{tag}}</Tag>    
     </div>
     <div style="margin-top: 20px">
-      <Button style="margin-right: 10px" :class="currentIndex === index ? 'goods-detail-v' : 'goods-detail-v1'"
+      <Button style="margin-right: 10px; width: 100px;" :class="currentIndex === index ? 'goods-detail-v' : 'goods-detail-v1'"
         @click="tagClick(index)" v-for="(item, index) in banList" :index="index">{{ item }}
       </Button>
     </div>
     <div style="margin-top: 20px">
       <Row :gutter="16">
         <Col span="12">
-        <img src="@/assets/images/emc/image 9.png" class="goods-detail-img" />
+        <img class="goods-detail-img" :src="loadImage(this.modelInfo.modelCover.coverImgList[0])"/>
         </Col>
         <Col span="12">
         <div class="goods-detail-right">
           <ul class="goods-detail-ul1">
-            <li>模型类型</li>
-            <li>点赞数量</li>
-            <li>下载数量</li>
-            <li>更新时间</li>
-            <li>版本号</li>
-            <li>基础型号</li>
+            <li>CATEGORY</li>
+            <li>NAME</li>
+            <li>DESCRIBE</li>
+            <li>positivePromts</li>
+            <li>negativePromts</li>
+            <li>commom params</li>
           </ul>
           <ul class="goods-detail-ul2">
-            <li>Loar</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>标准1.4</li>
+            <li>{{this.modelInfo.cateGory1}}</li>
+            <li>{{this.modelInfo.modelName}}</li>
+            <li>{{this.modelInfo.modelSubName}}</li>
+            <li>{{this.modelDetailInfo.positivePromts}}</li>
+            <li>{{this.modelDetailInfo.negativePromts}}</li>
+            <li>{{this.modelDetailInfo.commonParams}}</li>
           </ul>
         </div>
         <div class="goods-detail-user">
           <img src="@/assets/images/emc/Ellipse 4.png" />
           <div class="goods-detail-user-right">
             <span>WaveWSBS</span>
-            <Button>关注</Button>
+            <Button></Button>
           </div>
         </div>
         <Divider></Divider>
@@ -61,7 +60,7 @@
               <img src="@/assets/images/emc/Ellipse 4.png"></img>
               <div class="goods-detail-bottom-top-div">
                 <span>WaveWSBS</span>
-                <p>5个小时前</p>
+                <p>5 hours ago</p>
               </div>
             </div>
             <div class="goods-detail-bottom-bottom-div">
@@ -127,6 +126,9 @@
 
 <script>
 import { queryModelDetailInfo } from "@/api/modelinfo.js";
+import { datetimeFormat } from "@/plugins/DataUtil.js";
+import defaultImage from "@/assets/images/emc/image 9.png";
+
 export default {
   name: "GoodsList",
 
@@ -137,50 +139,65 @@ export default {
   },
   data() {
     return {
-      paramData: {
-        custId: 'PUBLIC',
-        bussData: {
-          model_id: this.$route.query.modelId
-        }
-      },
-      modelInfo:{
-        modelId:'',
-        modelName:'',
-        modelSubName:'',
-        cateGory1:'',
-        cateGory2:'',
-        modelCover:{
-          coverImgList:[],
-          coverVideoList:[],
-          tips:[]
+      modelInfo: {
+        modelId: '',
+        modelName: '',
+        modelSubName: '',
+        cateGory1: '',
+        cateGory2: '',
+        modelCover: {
+          coverImgList: [],
+          coverVideoList: [],
+          tips: []
         }
       },
       modelDetailInfo: {
-        modelIdL:'',
-        modelDesc:'',
-        version:'',
-        downLoadLink,
-        guideLink,
-        paramsGuideLink,
-        invokeGuide,
-        negativePromts,
-        positivePromts,
-        commonParams
+        modelIdL: '',
+        modelDesc: '',
+        version: '',
+        downLoadLink: '',
+        guideLink: '',
+        paramsGuideLink: '',
+        invokeGuide: '',
+        negativePromts: '',
+        positivePromts: '',
+        commonParams: ''
       },
-      banList: ['v5.0', 'v5.1', '5.2'],
+      banList: ['SNAPSHOT', 'RELEASE', 'ADVANCE'],
       currentIndex: 0,
     };
   },
   created() {
+    var paramData = {
+      custId: 'PUBLIC',
+      bussData: {
+        model_id: this.$route.query.modelId
+      }
+    };
+    this.modelLoad(paramData);
   },
   methods: {
+    loadImage(value){
+    if (value === undefined) {
+      return defaultImage;
+    }
+    return value;
+  },
+    dateLong2Str(datelong){
+      return datetimeFormat(datalong);
+    },
     tagClick(index) {
       this.currentIndex = index
     },
     modelLoad(paramData) {
-      queryModelDetailInfo(queryModelDetailInfo).then(res=>{
-        this.modelInfo=JSON.parse(res.bussData.modelInfo);
-        this.modelDetailInfo = JSON.parse(res.bussData.modelDetailInfo);
+      queryModelDetailInfo(paramData).then(res => {
+        if (res.resultCode === 'SUCCESS') {
+          this.modelInfo = JSON.parse(res.bussData.modelInfo);
+          this.modelDetailInfo = JSON.parse(res.bussData.modelDetail);
+        } else {
+          alert('Please re-login and retry!')
+          this.$router.go(-1);
+        }
       });
 
     }
@@ -265,15 +282,17 @@ export default {
   display: flex;
   border-radius: 6px;
   background: #F0D7FF;
+  color: #2b7fb3;
   flex-direction: row;
 }
 
 .goods-detail-ul1 {
-  width: 20%;
+  width: 40%;
   height: 100%;
   margin-top: 15px;
   display: flex;
   flex-direction: column;
+  color: #2b7fb3;
   margin-left: 20px;
 }
 
