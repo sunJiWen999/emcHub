@@ -1,5 +1,5 @@
 <template>
-  <div class="model-form">
+  <div class="model-waterfall">
     <div class="model-content">
       <img class="model-thematic" src="@/assets/images/ThematicModels.png" alt="" />
       <div class="model-card">
@@ -20,7 +20,7 @@
                   </div>
                   <div>
                     <img class="model-card-square" src="@/assets/images/emc/Vector1.png"/>
-                    <div>1343</div>
+                    <div>{{model.desc}}</div>
                   </div>
                 </div>
               </div>

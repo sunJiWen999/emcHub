@@ -22,7 +22,9 @@ export function getModelInfoForMainFrame() {
                 modelInfoItem.src = JSON.parse(modelInfo.modelCover.coverImgList)[0];
             }
             modelInfoItem.num = 0;
-            modeInfoGrid.push(modelInfoItem);
+            if(modelInfoItem.src != undefined){
+                modeInfoGrid.push(modelInfoItem);
+            }
             //console.log(modeInfoGrid[i], "99999977777777777777777777");
         } 
     });
@@ -64,7 +66,7 @@ function queryMainGrid() {
             "custId": "1685969357974",
             "bussData": {
                 "pageIndex": 0,
-                "pageSize": 5
+                "pageSize": 50
             }
         }
     });
