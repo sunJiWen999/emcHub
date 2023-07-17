@@ -48,6 +48,9 @@
           <FormItem label="loginId" prop="LogInId">
             <Input v-model="regInfoBussData.loginId"></Input>
           </FormItem>
+          <FormItem label="nickName" prop="NickName">
+            <Input v-model="regInfoBussData.nickName"></Input>
+          </FormItem>
           <FormItem label="email" prop="email">
             <Input v-model="regInfoBussData.email"></Input>
           </FormItem>
@@ -88,6 +91,17 @@ export default {
           authToken: ""
         }
       },
+      userInfo:{
+        custId:'',
+        userLoginId:'',
+        loginNickName:''
+      },
+      regInfo: {
+        actionCode: 'register',
+        bussData: {
+          applRegInfo: ''
+        }
+      },
       regInfoBussData: {
         loginId: '',
         email: '',
@@ -119,6 +133,7 @@ export default {
       this.regVisible = true;
     },
     getLogin() {
+      this.userLoginInfo.bussData.identityType="PASSWD";
       LoginByPassWD(this.userLoginInfo).then(res => {
         if (res.loginStatus === 'true') {
           this.hasLogin = true;
@@ -129,6 +144,7 @@ export default {
         }
 
       });
+      alert("Login SUCCESS,welcome "+ regInfoBussData.nickName);
     },
     logWithWallet() {
       emcAuthClient.login({
@@ -153,6 +169,7 @@ export default {
           alert("Register fail,please retry");
         }
       })
+      alert("Register has success,please use your login_id and password to re-login");
     },
     setAuthToken() {
       authTokenSet(this.authInfoData).then(res => {
