@@ -25,7 +25,7 @@
           </li>
           <li v-if="custId" style="position: relative;cursor: pointer;" @click="Information">
             <img src="@/assets/images/Ellipse6.png" class="nav-item nav-d" />
-            <span class="detail-name">d</span>
+            <span class="detail-name">E</span>
           </li>
         </ul>
       </div>
@@ -36,9 +36,9 @@
           <ul @click="goUser" style="cursor: pointer;">
             <li style="position: relative">
               <img src="@/assets/images/Ellipse6.png" class="nav-item nav-d" alt="" />
-              <span class="detail-sigle-name">d</span>
+              <span class="detail-sigle-name">U</span>
             </li>
-            <li><span class="box-Wave">WaveWSBS</span></li>
+            <li><span class="box-Wave">User Center</span></li>
             <li>
               <img class="box-Vector" src="@/assets/images/Vector.png" alt="" />
             </li>
@@ -48,8 +48,7 @@
         <div class="box-my">
           <ul>
             <li v-for="item in myList" :key="item.id">
-              <div class="box-num">{{ item.num }}</div>
-              <img class="box-img" :src="item.src" alt="" />
+              <img class="box-img" @click="item.action" :src="item.src" alt="" />
               <div class="box-tittle">{{ item.tittle }}</div>
             </li>
           </ul>
@@ -129,7 +128,7 @@
 <script>
 import storage from "@/plugins/storage.js";
 import { logout } from "@/api/account.js";
-import { LoginByPassWD, userRegOrigin, authTokenSet } from "@/api/login";
+import { LoginByPassWD, userRegOrigin, authTokenSet,openAcct } from "@/api/login";
 import { instance as emcAuthClient } from '@/plugins/auth';
 
 
@@ -144,7 +143,7 @@ export default {
     return {
       loginVisible: false,
       regVisible: false,
-      custId: storage.getItem('custId'), // 用户信息
+      custId: storage.getItem('custId'), 
       userLoginInfo: {
         custId: "1111",
         bussData: {
@@ -172,6 +171,12 @@ export default {
           authToken: ''
         }
       },
+      openAcctInfo:{
+        custId: storage.getItem('custId'),
+        bussData:{
+          walletToken:''
+        }
+      },
       shoppingCart: [], // 购物车
       showInformation: false,
       hasLogin: false,
@@ -186,27 +191,21 @@ export default {
       myList: [
         {
           id: 1,
-          num: 12,
           src: require("@/assets/images/Book.png"),
+          action:{},
           tittle: "My model",
         },
         {
           id: 2,
-          num: 12,
           src: require("@/assets/images/Adduser.png"),
+          action:{},
           tittle: "My invoke",
         },
         {
           id: 3,
-          num: 12,
-          src: require("@/assets/images/Target.png"),
-          tittle: "My fans",
-        },
-        {
-          id: 4,
-          num: 12,
           src: require("@/assets/images/Storage.png"),
-          tittle: "Notes",
+          action:this.logWithWallet,
+          tittle: "Relate wallet",
         },
       ],
     };
@@ -222,6 +221,10 @@ export default {
         onSuccess: (message) => {
           //{"type": "authorize-success","data": "tdvch-tx3ik-r2bzp-pncic-ahjes-57rvk-oa6qu-blzh2-brbs5-x67zv-jae"}
           console.info('success', message);
+          if('authorize-success' === message.type){
+            this.openAcctInfo.bussData.walletToken = message.data;
+            this.openAcctInvoke();
+          }
         },
         onError(message) {
           console.info(message);
@@ -284,6 +287,17 @@ export default {
           alert("Register fail,please retry");
         }
       })
+    },
+    openAcctInvoke(){
+      openAcct(this.openAcctInfo).then(ret=>{
+        if(ret.resultCode === 'SUCCESS'){
+          alert("wallet binging success");
+        } else {
+          alert("wallet binging fail,please check and retry")
+        }
+
+      })
+      
     }
 
   },
