@@ -1,7 +1,7 @@
 import request, {Method} from '@/plugins/request.js';
 
 /**
- * 账号密码登录
+ * use loginId and password
  */
 export function LoginByPassWD(params) {
   params.bussData.identiType="PASSWD";
@@ -11,8 +11,10 @@ export function LoginByPassWD(params) {
     data:params
   });
 }
+
+
 /**
- * 用户注册-原生注册
+ * register user
  */
 export function userRegOrigin(params) {
   return request({
@@ -22,6 +24,12 @@ export function userRegOrigin(params) {
   });
 }
 
+/**
+ * 
+ * reset password
+ * @param {*} params 
+ * @returns 
+ */
 export function authTokenSet(params){
   return request({
     url: '/setAutoration.do',
@@ -29,6 +37,14 @@ export function authTokenSet(params){
     data:params
   });
 
+}
+
+export function openAcct(params){
+  return request({
+    url: '/userRelatedWithPrinciple.do',
+    method:'POST',
+    data:params
+  });
 }
 
 

@@ -14,7 +14,7 @@
         type="drag"
         :action="uploadAction">
         <img src="@/assets/images/emc/Vector.png"/>
-        <!--        <span>上传模型缩略图，不限尺寸</span>-->
+     
       </Upload>
       <div class="model-uploadFour-right">
         <Form ref="formValidateFour"

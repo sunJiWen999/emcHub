@@ -28,12 +28,6 @@
           <span>New Registor</span>
         </Button>
       </div>
-      <div class="modal-button-bottom">
-        <Button @click="logWithWallet">
-          <img src="@/assets/images/logo-tittle.png"/>
-          <span>IC-WAllET</span>
-        </Button>
-      </div>
     </div>
     <!--    注册-->
     <div v-if="regVisible">
@@ -137,7 +131,7 @@ export default {
       LoginByPassWD(this.userLoginInfo).then(res => {
         if (res.loginStatus === 'true') {
           this.hasLogin = true;
-          storage.setItem('custId', this.userLoginInfo.custId)
+          storage.setItem('custId', res.bussData.custId);
           this.$router.push("/");
         } else {
           alert("Login fail");
