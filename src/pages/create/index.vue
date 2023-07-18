@@ -3,98 +3,119 @@
     <div class="create-left">
       <span @click="tabClick">文本创作</span>
       <span @click="tabClickTwo" style="margin-left: 20px">图生图</span>
-      <createContent v-if="tab==='first'"/>
-      <div v-if="tab==='two'" class="create-upload">
-        <div class="create-upload-div">
-          <img  src="@/assets/images/emc/Vector.png" />
+      <createContent v-if="tab === 'first'" />
+      <div v-if="tab === 'two'" class="create-upload">
+        <Upload
+          v-if="!fileUrl"
+          class="create-upload-div"
+          ref="upload"
+          :show-upload-list="false"
+          :on-success="handleSuccess"
+          :max-size="10240"
+          :on-format-error="handleFormatError"
+          :on-exceeded-size="handleMaxSize"
+          :before-upload="handleBeforeUpload"
+          multiple
+          type="drag"
+          :action="uploadAction"
+        >
+           <img  src="@/assets/images/emc/Vector.png" />
+        </Upload>
+        <div    v-if="fileUrl">
+          <uploadSuccess/>
         </div>
       </div>
     </div>
     <div class="create-right">
-      <Form :model="formItem" :label-width="60">
+      <Form :model="formItem" :label-width="60" style="margin-top: 20px">
         <FormItem label="模式">
           <Select v-model="formItem.input"></Select>
         </FormItem>
         <FormItem label="模型">
-          <Select v-model="formItem.select">
-          </Select>
+          <Select v-model="formItem.select"> </Select>
         </FormItem>
         <FormItem label="风格">
-          <Select>
-          </Select>
+          <Select> </Select>
         </FormItem>
         <FormItem label="基础设置">
           <div class="basic-sz">
             <div class="basic-sz-top">
-              <span>
-                图片宽度
-                </span>
-              <p>
-                75
-              </p>
+              <span> 图片宽度 </span>
+              <p>75</p>
               <span>px</span>
             </div>
             <div class="basic-sz-top">
-              <span>
-                图片高度
-                </span>
-              <p>
-                75
-              </p>
+              <span> 图片高度 </span>
+              <p>75</p>
               <span>px</span>
             </div>
           </div>
         </FormItem>
         <FormItem label="节点选择">
-          <Select>
-          </Select>
+          <Select> </Select>
         </FormItem>
       </Form>
       <div class="create-right-bottom">
         <Button @click="goSeeNode">查看节点视图</Button>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
 import createContent from "@/pages/create/components/createContent";
+import uploadSuccess from "@/pages/create/components/uploadSuccess"
 export default {
   name: "Create",
   components: {
     createContent,
+    uploadSuccess
   },
   data() {
     return {
-      tab:'first',
+      fileUrl:'',
+      tab: "first",
+      uploadAction: BASE.API_PROD.emchub + '/fileUpload.do',
       formItem: {
-        input: '',
-        select: '',
-        radio: 'male',
+        input: "",
+        select: "",
+        radio: "male",
         checkbox: [],
         switch: true,
-        date: '',
-        time: '',
-        slider: [20, 50],
-        textarea: ''
-      }
+      },
     };
   },
   mounted() {
     // this.init();
   },
   methods: {
-    tabClick(){
-      this.tab='first'
+    handleSuccess(res, file) {
+      this.fileUrl=file.response.bussData.file_link
+      this.$Message.success(`upload${file.response.resultCode}`)
     },
-    tabClickTwo(){
-      this.tab='two'
+    handleFormatError(file) {
+      // this.$Message.error("非'ckpt'||'pt'||'safetensors'||'bin'||'zip'格式的文件，请重新选择！");
+      // return false;
     },
-    goSeeNode(){
-      this.$router.push('/nodeSee')
-    }
-
+    handleMaxSize(file) {
+      this.$Notice.warning({
+        title: 'Exceeding file size limit',
+        desc: 'File  ' + file.name + ' is too large, no more than 10M.'
+      });
+    },
+    handleBeforeUpload(file) {
+      let fileName = file.name;
+      let suffix = fileName.substr(fileName.lastIndexOf('.'));
+    },
+    tabClick() {
+      this.tab = "first";
+    },
+    tabClickTwo() {
+      this.tab = "two";
+    },
+    goSeeNode() {
+      this.$router.push("/nodeSee");
+    },
   },
 };
 </script>
@@ -125,74 +146,91 @@ export default {
 .create-right {
   max-height: 920px;
   width: 29.5%;
+  height: 800px;
   flex-shrink: 0;
   border-radius: 6px;
-  background: #EEE;
+  background: #eee;
   padding: 0px 10px 0px 10px;
 }
 
-/deep/ .ivu-select-single .ivu-select-selection .ivu-select-placeholder, .ivu-select-single .ivu-select-selection .ivu-select-selected-value {
+/deep/ .ivu-select-single .ivu-select-selection .ivu-select-placeholder,
+.ivu-select-single .ivu-select-selection .ivu-select-selected-value {
   //height: 36px;
   //flex-shrink: 0;
   border-radius: 6px;
-  background: #FFF;
+  background: #fff;
 }
 
 .basic-sz {
   //width: 344px;
   height: 123px;
   border-radius: 6px;
-  background: #FFF;
+  background: #fff;
   flex-shrink: 0;
 }
-.basic-sz-top{
+.basic-sz-top {
   height: 50%;
   display: flex;
   flex-direction: row;
   justify-items: center;
   align-items: center;
-  p{
+  p {
     width: 20%;
     text-align: center;
-    background: #EEE;
+    background: #eee;
   }
-  span{
+  span {
     text-align: center;
-    width:40%;
+    width: 40%;
   }
 }
-.create-right-bottom{
+.create-right-bottom {
   display: flex;
   flex-direction: row-reverse;
-  button{
+  button {
     width: 117px;
     height: 35px;
     border-radius: 26px;
-    background: linear-gradient(90deg, #834FFC 0%, #E5AEFF 100%);
+    background: linear-gradient(90deg, #834ffc 0%, #e5aeff 100%);
   }
 }
-.create-upload{
+.create-upload {
   width: 100%;
   height: 98%;
   display: flex;
-  align-items: center;
+  // align-items: center;
   justify-content: center;
 }
-.create-upload-div{
+.create-upload-div {
   width: 692px;
-  height: 440px;
+  height: 400px;
   flex-shrink: 0;
   border-radius: 6px;
-  background: rgba(0, 0, 0, 0.10);
+   background: rgba(0, 0, 0, 0.10);
   display: flex;
   align-items: center;
   justify-content: center;
-  img{
-    width: 88px;
-    height: 71px;
-  }
+  flex-direction: column;
+   img{
+     width: 88px;
+     height: 71px;
+   }
 }
 
+
+/deep/ .ivu-input {
+  height: 71px;
+  background-color: #eee;
+}
+/deep/ .ivu-input-word-count {
+  background: #eee;
+  color: #333;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  //line-height: 24px;
+}
 
 
 </style>
