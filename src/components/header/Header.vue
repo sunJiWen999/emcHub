@@ -199,7 +199,11 @@ export default {
           id: 2,
           src: require("@/assets/images/Adduser.png"),
           action:{},
+<<<<<<< HEAD
           tittle: "My invoke",
+=======
+          tittle: "My download",
+>>>>>>> 4dccae812d9481c631db6f2c77223272afcbcdb8
         },
         {
           id: 3,
