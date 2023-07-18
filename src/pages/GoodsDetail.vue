@@ -1,226 +1,203 @@
 <template>
-  <div style="background: #fff">
-    <BaseHeader></BaseHeader>
-    <Search></Search>
-    <drawer></drawer>
-    <ShopHeader :detail="storeMsg"></ShopHeader>
-    <div class="shop-item-path">
-      <div class="shop-nav-container">
-        <Breadcrumb>
-          <BreadcrumbItem to="/">首页</BreadcrumbItem>
-          <BreadcrumbItem v-for="(item, index) in categoryBar" :to="goGoodsList(index)" target="_blank" :key="index">
-            {{ item.name }}
-          </BreadcrumbItem>
-        </Breadcrumb>
-        <div class="store-collect" v-if="!takeDownSale">
-          <span class="mr_10" v-if="goodsMsg.data">
-            <router-link :to="'Merchant?id=' + goodsMsg.data.storeId">{{
-              goodsMsg.data.storeName
-            }}</router-link>
-          </span>
-          <span @click="collect">
-            <Icon type="ios-heart" :color="storeCollected ? '#ed3f14' : '#666'" />
-            {{ storeCollected? "已收藏店铺": "收藏店铺" }}
-          </span>
-          <span class="ml_10" @click="IMService(goodsMsg.data.storeId,goodsMsg.data.goodsId,goodsMsg.data.id)">联系客服</span>
-        </div>
+  <div class="create">
+    <div class="create-left">
+      <!-- <span @click="tabClick">文本创作</span> -->
+      <!-- <span @click="tabClickTwo" style="margin-left: 20px">图生图</span> -->
+      <!-- <createContent v-if="tab==='first'"/> -->
+      <!-- <div v-if="tab==='two'" class="create-upload"> -->
+      <div class="create-upload-div">
+        <img src="@/assets/images/jp.png" />
       </div>
+      <!-- </div> -->
     </div>
-
-    <!-- 商品信息展示 -->
-    <ShowGoods @handleClickSku="targetClickSku" v-if="goodsMsg.data" :detail="goodsMsg"></ShowGoods>
-    <!-- 商品详细展示 -->
-    <ShowGoodsDetail v-if="goodsMsg.data" :detail="goodsMsg"></ShowGoodsDetail>
-
-    <empty _Title='当前商品已下架' v-if="takeDownSale">
-      <div class="sale-btn">
-        <Button size="small" class="mr_10" @click="target('/')">返回首页</Button>
-        <Button size="small" @click="target('goodsList')">返回商品列表</Button>
+    <div class="create-right">
+      <Form :model="formItem" :label-width="60" style="margin-top:20px">
+        <FormItem label="模型">
+          <Select v-model="formItem.input"></Select>
+        </FormItem>
+        <FormItem label="Prompt">
+          <Select v-model="formItem.select">
+          </Select>
+        </FormItem>
+        <FormItem label="风格">
+          <Select>
+          </Select>
+        </FormItem>
+        <FormItem label="基础设置">
+          <div class="basic-sz">
+            <div class="basic-sz-top">
+              <span>
+                图片宽度
+                </span>
+              <p>
+                75
+              </p>
+              <span>px</span>
+            </div>
+            <div class="basic-sz-top">
+              <span>
+                图片高度
+                </span>
+              <p>
+                75
+              </p>
+              <span>px</span>
+            </div>
+          </div>
+        </FormItem>
+        <FormItem label="节点选择">
+          <Select>
+          </Select>
+        </FormItem>
+      </Form>
+      <div class="create-right-bottom">
+        <Button @click="goSeeNode">运行</Button>
       </div>
-    </empty>
-    <Spin size="large" fix v-if="isLoading"></Spin>
-    <BaseFooter></BaseFooter>
+
+    </div>
   </div>
 </template>
 
 <script>
-import Search from "@/components/Search";
-import ShopHeader from "@/components/header/ShopHeader";
-import ShowGoods from "@/components/goodsDetail/ShowGoods";
-import empty from "@/components/empty/Main";
-import ShowGoodsDetail from "@/components/goodsDetail/ShowGoodsDetail";
-import { goodsSkuDetail } from "@/api/goods";
-import {
-  cancelStoreCollect,
-  collectStore,
-  isStoreCollection,
-  getGoodsDistribution,
-} from "@/api/member";
-
-import imTalk from '@/components/mixes/talkIm'
+import createContent from "@/pages/create/components/createContent";
 export default {
-  name: "GoodsDetail",
-  beforeRouteEnter (to, from, next) {
-    window.scrollTo(0, 0);
-    next();
+  name: "Create",
+  components: {
+    createContent,
   },
-  created () {
-    this.getGoodsDetail();
-  },
-  mixins: [imTalk],
-  data () {
+  data() {
     return {
-      goodsMsg: {}, // 商品信息
-      isLoading: false, // 加载状态
-      categoryBar: [], // 分类
-      storeCollected: false, // 商品收藏
-      storeMsg: {}, // 店铺信息
-      takeDownSale:false, // 是否下架
-
+      tab:'first',
+      formItem: {
+        input: '',
+        select: '',
+        radio: 'male',
+        checkbox: [],
+        switch: true,
+        date: '',
+        time: '',
+        slider: [20, 50],
+        textarea: ''
+      }
     };
   },
-  methods: {
-    // 跳转首页或商品页面
-    target(url){
-      this.$router.push({path: url})
-
-    },
-    // 点击规格
-    targetClickSku (val) {
-      this.getGoodsDetail(val);
-    },
-    // 获取商品详情
-    getGoodsDetail (val) {
-      this.isLoading = true;
-      const params = val || this.$route.query;
-
-      // 分销员id
-      let distributionId =
-        params && params.distributionId
-          ? params.distributionId
-          : this.Cookies.getItem("distributionId");
-      // 如果有分销信息
-      if (distributionId) {
-        console.log(distributionId);
-        // 先存储
-        this.Cookies.setItem("distributionId", params.distributionId);
-        let _this = this;
-        // 绑定关系
-        getGoodsDistribution(params.distributionId).then((res) => {
-          // 绑定成功，则清除关系
-          if (res.success) {
-            _this.Cookies.removeItem("distributionId");
-          }
-        });
-      }
-
-      goodsSkuDetail(params)
-        .then((res) => {
-          this.isLoading = false;
-          if (res.success) {
-
-            const result = res.result;
-            const cateName = res.result.categoryName;
-            const cateId = result.data.categoryPath.split(",");
-            const cateArr = [];
-            cateId.forEach((e, index) => {
-              // 插入分类id和name
-              cateArr.push({
-                id: e,
-                name: cateName ? cateName[index] : "",
-              });
-            });
-            this.categoryBar = cateArr;
-            this.$set(this, "goodsMsg", res.result);
-            // 判断是否收藏
-            if (this.Cookies.getItem("userInfo")) {
-              isStoreCollection("STORE", this.goodsMsg.data.storeId).then((res) => {
-                if (res.success && res.result) {
-                  this.storeCollected = true;
-                }
-              });
-            }
-
-            if (!this.storeMsg) {
-            }
-          } else {
-            this.$Message.error(res.message);
-            this.isLoading = false
-          }
-        })
-        .catch((e) => {
-          this.isLoading = false
-          if(e.code === 11001){
-            this.takeDownSale = true
-          }
-        });
-    },
-    goGoodsList (currIndex) {
-      // 跳转商品列表
-      const arr = [];
-      this.categoryBar.forEach((e, index) => {
-        if (index <= currIndex) {
-          arr.push(e.id);
-        }
-      });
-      return location.origin + "/goodsList?categoryId=" + arr.toString();
-    },
-    async collect () {
-      // 收藏店铺
-      if (this.storeCollected) {
-        let cancel = await cancelStoreCollect("STORE", this.goodsMsg.data.storeId);
-        if (cancel.success) {
-          this.$Message.success("已取消收藏");
-          this.storeCollected = false;
-        }
-      } else {
-        let collect = await collectStore("STORE", this.goodsMsg.data.storeId);
-        if (collect.code === 200) {
-          this.storeCollected = true;
-          this.$Message.success("收藏店铺成功,可以前往个人中心我的收藏查看");
-        }
-      }
-    },
+  mounted() {
+    // this.init();
   },
-  watch: {},
-  components: {
-    Search,
-    ShopHeader,
-    ShowGoods,
-    ShowGoodsDetail,
-    empty
+  methods: {
+    tabClick(){
+      this.tab='first'
+    },
+    tabClickTwo(){
+      this.tab='two'
+    },
+    goSeeNode(){
+      this.$router.push('/Coupon')
+    }
+
   },
 };
 </script>
+
 <style scoped lang="scss">
-.shop-item-path {
-  height: 38px;
-  @include background_color($light_background_color);
-  line-height: 38px;
-  color: #2c2c2c;
+.create {
+  width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-top: 43px;
 }
 
-.shop-nav-container {
-  width: 1200px;
-  margin: 0 auto;
-  position: relative;
-
-  .store-collect {
-    position: absolute;
-    right: 20px;
-    top: 0;
-    color: #999;
-
-    span {
-      &:hover {
-        cursor: pointer;
-        color: $theme_color;
-      }
-    }
+.create-left {
+  width: 70.5%;
+  //height: 93vh;
+  span {
+    color: #555;
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
   }
 }
-.sale-btn{
-  margin:10px 0
 
+.create-right {
+  max-height: 920px;
+  width: 29.5%;
+  height: 800px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: #EEE;
+  padding: 0px 10px 0px 10px;
 }
+
+/deep/ .ivu-select-single .ivu-select-selection .ivu-select-placeholder, .ivu-select-single .ivu-select-selection .ivu-select-selected-value {
+  //height: 36px;
+  //flex-shrink: 0;
+  border-radius: 6px;
+  background: #FFF;
+}
+
+.basic-sz {
+  //width: 344px;
+  height: 123px;
+  border-radius: 6px;
+  background: #FFF;
+  flex-shrink: 0;
+}
+.basic-sz-top{
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  align-items: center;
+  p{
+    width: 20%;
+    text-align: center;
+    background: #EEE;
+  }
+  span{
+    text-align: center;
+    width:40%;
+  }
+}
+.create-right-bottom{
+  display: flex;
+  flex-direction: row-reverse;
+  button{
+    margin-right: 28px;
+    margin-top: 20px;
+    width: 240px;
+    height: 35px;
+    border-radius: 26px;
+    background: linear-gradient(90deg, #834FFC 0%, #E5AEFF 100%);
+  }
+}
+.create-upload{
+  width: 100%;
+  height: 98%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.create-upload-div{
+  margin-top: 143px;
+  width: 692px;
+  height: 440px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img{
+
+    width: 741px;
+    height: 708px;
+  }
+}
+
+
+
 </style>
