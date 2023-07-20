@@ -14,7 +14,7 @@
         type="drag"
         :action="uploadAction">
         <img src="@/assets/images/emc/Vector.png"/>
-     
+
       </Upload>
       <div class="model-uploadFour-right">
         <Form ref="formValidateFour"
@@ -124,7 +124,6 @@ export default {
     },
     handleSuccess(res, file) {
       this.fileIdList.push(file.response.bussData.file_link)
-      console.log(this.fileIdList, 66666666666)
       this.$Message.success(`upload${file.response.resultCode}`)
     },
     handleFormatError(file) {

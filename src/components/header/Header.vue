@@ -143,7 +143,7 @@ export default {
     return {
       loginVisible: false,
       regVisible: false,
-      custId: storage.getItem('custId'), 
+      custId: storage.getItem('custId'),
       userLoginInfo: {
         custId: "1111",
         bussData: {
@@ -199,7 +199,7 @@ export default {
           id: 2,
           src: require("@/assets/images/Adduser.png"),
           action:{},
-          tittle: "My download",
+          tittle: "My invoke",
         },
         {
           id: 3,
@@ -297,7 +297,7 @@ export default {
         }
 
       })
-      
+
     }
 
   },
